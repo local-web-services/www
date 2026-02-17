@@ -1,0 +1,25 @@
+The updates look good. Here's a summary of all changes made to the documentation site:
+
+**Updated existing services with missing operations:**
+- **DynamoDB**: Added DescribeTimeToLive, TagResource, UntagResource, ListTagsOfResource
+- **SQS**: Added TagQueue, UntagQueue, ListQueueTags
+- **S3**: Changed CreateMultipartUpload from unsupported to supported; added UploadPart, CompleteMultipartUpload, AbortMultipartUpload, ListParts
+- **SNS**: Added GetTopicAttributes, TagResource, UntagResource, ListTagsForResource
+- **EventBridge**: Added CreateEventBus, DescribeEventBus, DeleteEventBus; reorganized operations logically
+- **Step Functions**: Added DescribeStateMachine, DeleteStateMachine, ListStateMachineVersions, ValidateStateMachineDefinition, TagResource, UntagResource, ListTagsForResource; removed duplicate entries
+- **Cognito**: Added CreateUserPool, DescribeUserPool, ListUserPools, DeleteUserPool; changed ForgotPassword, ChangePassword, GlobalSignOut from unsupported to supported; added ConfirmForgotPassword
+- **Lambda**: Added CreateEventSourceMapping, GetEventSourceMapping, DeleteEventSourceMapping, AddPermission, RemovePermission, GetPolicy, ListTags
+- **API Gateway REST (V1)**: Expanded from 8 to 29 operations (added ListRestApis, UpdateRestApi, GetResources, DeleteResource, GetMethod, DeleteMethod, PutMethodResponse, GetMethodResponse, GetIntegration, DeleteIntegration, PutIntegrationResponse, GetIntegrationResponse, TestInvokeMethod, GetDeployment, ListDeployments, GetStage, UpdateStage, DeleteStage, CreateAuthorizer, GetAuthorizer, ListAuthorizers)
+- **API Gateway HTTP (V2)**: Expanded from 9 to 21 operations; added CORS, JWT authorizers, multi-value query/headers, binary payload notes
+- **Secrets Manager**: Added GetResourcePolicy
+
+**Added 9 entirely new service sections:**
+- **RDS** (CreateDBCluster, DescribeDBClusters, DeleteDBCluster, CreateDBInstance, DescribeDBInstances, DeleteDBInstance)
+- **DocumentDB** (CreateDBCluster, DescribeDBClusters, DeleteDBCluster)
+- **Neptune** (CreateDBCluster, DescribeDBClusters, DeleteDBCluster)
+- **Elasticsearch** (CreateElasticsearchDomain, DescribeElasticsearchDomains, DeleteElasticsearchDomain, ListElasticsearchDomainNames)
+- **OpenSearch** (CreateDomain, DescribeDomains, DeleteDomain, ListDomainNames)
+- **ElastiCache** (CreateCacheCluster, DescribeCacheClusters, DeleteCacheCluster)
+- **MemoryDB** (CreateCluster, DescribeClusters, DeleteCluster)
+- **Glacier** (CreateVault, ListVaults)
+- **S3 Tables** (CreateTableBucket, ListTableBuckets, CreateTable, ListTables)
