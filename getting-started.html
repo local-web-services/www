@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started - Local Web Services</title>
+  <meta name="description" content="Install Local Web Services and get running with AWS CDK or Terraform in under five minutes.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html" class="nav-active">Get Started</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="mocking.html">Mocking</a></li>
+        <li><a href="chaos.html">Chaos</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Getting Started</h1>
+      <p class="section-lead">Get Local Web Services running with a sample project in under five minutes. Choose your IaC tool below.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h2>Prerequisites</h2>
+      <p class="section-lead">These are required for both CDK and Terraform workflows.</p>
+
+      <div class="getting-started-steps">
+        <div class="gs-step">
+          <ul>
+            <li><a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a> &mdash; Python package runner</li>
+            <li><a href="https://docs.docker.com/get-docker/">Docker</a> &mdash; required for Lambda runtime emulation</li>
+            <li>Node.js 18+ &mdash; required for CDK projects and Node.js Lambda handlers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>CDK Quick Start</h2>
+      <p class="section-lead">Clone a sample CDK project and run it locally in five steps.</p>
+
+      <div class="getting-started-steps">
+        <div class="gs-step">
+          <h3>Additional Prerequisite</h3>
+          <ul>
+            <li>AWS CDK CLI (<code>npm install -g aws-cdk</code>)</li>
+          </ul>
+        </div>
+
+        <div class="gs-step">
+          <h3>1. Clone the sample project</h3>
+          <div class="code-block"><code>git clone https://github.com/local-web-services/sample-project.git
+cd sample-project
+npm install</code></div>
+        </div>
+
+        <div class="gs-step">
+          <h3>2. Synthesize the CDK app</h3>
+          <div class="code-block"><code>cdk synth</code></div>
+        </div>
+
+        <div class="gs-step">
+          <h3>3. Pull Lambda runtime images (one-time)</h3>
+          <div class="code-block"><code>uvx --from local-web-services ldk setup lambda</code></div>
+          <p>This pulls the official AWS Lambda base images from ECR Public, which include the AWS SDK pre-installed. You only need to do this once.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>4. Start the local environment</h3>
+          <div class="code-block"><code>uvx --from local-web-services ldk dev</code></div>
+          <p>The <code>ldk dev</code> command reads the cloud assembly and starts local providers for every resource in the stack &mdash; DynamoDB tables, SQS queues, S3 buckets, Lambda functions, API Gateway, SSM parameters, and Secrets Manager secrets &mdash; all wired together.</p>
+          <p>Once started, open <strong>http://localhost:3000/_ldk/gui</strong> to access the web dashboard with real-time logs, resource explorer, and system status.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>5. Make requests</h3>
+          <div class="code-block"><code># Create an order via API Gateway
+curl -X POST http://localhost:3000/orders \
+  -H "Content-Type: application/json" \
+  -d '{"customerName": "Jane", "items": ["Widget"], "total": 29.99}'
+
+# Get the order
+curl http://localhost:3000/orders/{orderId}
+
+# Inspect data with lws
+uvx --from local-web-services lws dynamodb scan --table-name OrdersTable
+uvx --from local-web-services lws sqs receive-message --queue-name OrderQueue
+uvx --from local-web-services lws s3api list-objects-v2 --bucket order-documents</code></div>
+          <p>The sample project is an order processing system with API Gateway, Lambda, DynamoDB, SQS, SNS, S3, and Step Functions &mdash; all running on your machine. Use <code>lws</code> commands to inspect the data your application creates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Terraform Quick Start</h2>
+      <p class="section-lead">Clone a sample Terraform project and run it locally in six steps.</p>
+
+      <div class="getting-started-steps">
+        <div class="gs-step">
+          <h3>Additional Prerequisite</h3>
+          <ul>
+            <li><a href="https://www.terraform.io/">Terraform</a> >= 1.0</li>
+          </ul>
+        </div>
+
+        <div class="gs-step">
+          <h3>1. Clone the Terraform sample project</h3>
+          <div class="code-block"><code>git clone https://github.com/local-web-services/sample-project-terraform.git
+cd sample-project-terraform
+cd lambda/create-order && npm install && cd ../..
+cd lambda/get-order && npm install && cd ../..
+cd lambda/process-order && npm install && cd ../..
+cd lambda/generate-receipt && npm install && cd ../..</code></div>
+        </div>
+
+        <div class="gs-step">
+          <h3>2. Initialize Terraform</h3>
+          <div class="code-block"><code>terraform init</code></div>
+        </div>
+
+        <div class="gs-step">
+          <h3>3. Pull Lambda runtime images (one-time)</h3>
+          <div class="code-block"><code>uvx --from local-web-services ldk setup lambda</code></div>
+          <p>This pulls the official AWS Lambda base images from ECR Public, which include the AWS SDK pre-installed. You only need to do this once.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>4. Start the local environment</h3>
+          <div class="code-block"><code>uvx --from local-web-services ldk dev</code></div>
+          <p>The <code>ldk dev</code> command auto-detects your Terraform project, starts all AWS service providers in always-on mode, and generates a <code>_lws_override.tf</code> file that redirects Terraform's AWS provider to your local endpoints.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>5. Apply Terraform</h3>
+          <p>In another terminal, apply your Terraform configuration against the local services:</p>
+          <div class="code-block"><code>terraform apply -auto-approve</code></div>
+          <p>Terraform creates all resources (DynamoDB tables, SQS queues, Lambda functions, API Gateway routes, etc.) against your local endpoints. No AWS account needed.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>6. Test the application</h3>
+          <div class="code-block"><code># Run the end-to-end test script
+bash test-orders.sh
+
+# Or test manually with lws commands
+uvx --from local-web-services lws dynamodb scan --table-name Orders
+uvx --from local-web-services lws stepfunctions start-execution \
+  --name OrderWorkflow \
+  --input '{"orderId": "test-123", "items": ["widget"], "total": 29.99}'</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>Run AWS CDK &amp; Terraform apps locally</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1095,6 +1095,154 @@ body {
   }
 }
 
+/* Active Nav Link */
+.nav-active {
+  color: var(--color-primary) !important;
+}
+
+.nav-active::after {
+  width: 100% !important;
+}
+
+/* Page Header (inner pages) */
+.page-header {
+  padding: 80px 0 48px;
+  text-align: center;
+  position: relative;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  color: var(--color-text);
+}
+
+.page-header .section-lead {
+  margin-bottom: 0;
+}
+
+/* Service Index (quick-nav badges) */
+.service-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto 48px;
+}
+
+.service-index a {
+  display: inline-block;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.service-index a:hover {
+  border-color: var(--color-primary);
+  background: rgba(255, 153, 0, 0.1);
+  color: var(--color-primary);
+}
+
+/* Service Category Subheading */
+.service-category {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 48px 0 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--color-border);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.service-category:first-of-type {
+  margin-top: 0;
+}
+
+/* Section Subheading (replaces inline styles) */
+.section-subheading {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-top: 64px;
+  margin-bottom: 32px;
+  color: var(--color-text);
+}
+
+.section-subheading--primary {
+  color: var(--color-primary);
+}
+
+.section-subheading--large {
+  font-size: 2rem;
+  margin-top: 80px;
+  margin-bottom: 48px;
+}
+
+/* 2-column feature grid variant */
+.feature-grid--2col {
+  grid-template-columns: 1fr 1fr;
+  max-width: 900px;
+  margin: 0 auto 64px;
+}
+
+/* Journey CTA section */
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.journey-grid .feature-card {
+  text-align: center;
+  text-decoration: none;
+}
+
+.journey-grid .feature-card h3 a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.journey-grid .feature-card h3 a:hover {
+  color: var(--color-primary);
+}
+
+/* Config example block */
+.config-example {
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .feature-grid--2col {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .journey-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Smooth scrolling enhancement */
 @media (prefers-reduced-motion: no-preference) {
   * {

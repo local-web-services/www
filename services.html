@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supported Services - Local Web Services</title>
+  <meta name="description" content="25 AWS service emulations supported by Local Web Services, including DynamoDB, Lambda, S3, SQS, API Gateway, and more.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="services.html" class="nav-active">Services</a></li>
+        <li><a href="mocking.html">Mocking</a></li>
+        <li><a href="chaos.html">Chaos</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Supported Services</h1>
+      <p class="section-lead">Each service provides AWS-compatible API operations emulated at runtime. In CDK mode, <strong>CDK constructs</strong> are parsed from your <code>cdk synth</code> output. In Terraform mode, all services start in always-on mode and resources are created dynamically via management APIs.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="service-index">
+        <a href="#dynamodb">DynamoDB</a>
+        <a href="#sqs">SQS</a>
+        <a href="#s3">S3</a>
+        <a href="#sns">SNS</a>
+        <a href="#eventbridge">EventBridge</a>
+        <a href="#stepfunctions">Step Functions</a>
+        <a href="#cognito">Cognito</a>
+        <a href="#lambda">Lambda</a>
+        <a href="#apigateway">API Gateway</a>
+        <a href="#ssm">SSM Parameter Store</a>
+        <a href="#secretsmanager">Secrets Manager</a>
+        <a href="#ecs">ECS</a>
+        <a href="#iam-sts">IAM &amp; STS</a>
+        <a href="#rds">RDS</a>
+        <a href="#documentdb">DocumentDB</a>
+        <a href="#neptune">Neptune</a>
+        <a href="#elasticsearch">Elasticsearch</a>
+        <a href="#opensearch">OpenSearch</a>
+        <a href="#elasticache">ElastiCache</a>
+        <a href="#memorydb">MemoryDB</a>
+        <a href="#glacier">Glacier</a>
+        <a href="#s3tables">S3 Tables</a>
+      </div>
+
+      <h3 class="service-category" style="margin-top: 0;">Core Services</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="dynamodb">
+          <div class="service-detail-header">
+            <h3>DynamoDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_dynamodb.Table</span>
+            </div>
+            <p class="cdk-props"><code>tableName</code>, <code>partitionKey</code>, <code>sortKey</code>, <code>globalSecondaryIndexes</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">PutItem</span>
+              <span class="op">GetItem</span>
+              <span class="op">DeleteItem</span>
+              <span class="op">UpdateItem</span>
+              <span class="op">Query</span>
+              <span class="op">Scan</span>
+              <span class="op">BatchGetItem</span>
+              <span class="op">BatchWriteItem</span>
+              <span class="op">CreateTable</span>
+              <span class="op">DeleteTable</span>
+              <span class="op">DescribeTable</span>
+              <span class="op">ListTables</span>
+              <span class="op">TransactGetItems</span>
+              <span class="op">TransactWriteItems</span>
+              <span class="op">UpdateTable</span>
+              <span class="op">DescribeContinuousBackups</span>
+              <span class="op">DescribeTimeToLive</span>
+              <span class="op">UpdateTimeToLive</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsOfResource</span>
+            </div>
+          </div>
+          <p class="service-note">Backed by SQLite. Supports expression attribute names/values, filter expressions, condition expressions, transactional operations, and eventual consistency simulation.</p>
+        </div>
+
+        <div class="service-detail" id="sqs">
+          <div class="service-detail-header">
+            <h3>SQS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_sqs.Queue</span>
+            </div>
+            <p class="cdk-props"><code>queueName</code>, <code>fifo</code>, <code>visibilityTimeout</code>, <code>contentBasedDeduplication</code>, <code>deadLetterQueue</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">SendMessage</span>
+              <span class="op">ReceiveMessage</span>
+              <span class="op">DeleteMessage</span>
+              <span class="op">CreateQueue</span>
+              <span class="op">GetQueueUrl</span>
+              <span class="op">GetQueueAttributes</span>
+              <span class="op">SetQueueAttributes</span>
+              <span class="op">DeleteQueue</span>
+              <span class="op">ListQueues</span>
+              <span class="op">PurgeQueue</span>
+              <span class="op">SendMessageBatch</span>
+              <span class="op">DeleteMessageBatch</span>
+              <span class="op">ChangeMessageVisibility</span>
+              <span class="op">ChangeMessageVisibilityBatch</span>
+              <span class="op">ListDeadLetterSourceQueues</span>
+              <span class="op">TagQueue</span>
+              <span class="op">UntagQueue</span>
+              <span class="op">ListQueueTags</span>
+            </div>
+          </div>
+          <p class="service-note">Supports message attributes, long polling, FIFO queues, batch operations, and dead-letter queue wiring from RedrivePolicy.</p>
+        </div>
+
+        <div class="service-detail" id="s3">
+          <div class="service-detail-header">
+            <h3>S3</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_s3.Bucket</span>
+            </div>
+            <p class="cdk-props"><code>bucketName</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">PutObject</span>
+              <span class="op">GetObject</span>
+              <span class="op">DeleteObject</span>
+              <span class="op">HeadObject</span>
+              <span class="op">ListObjectsV2</span>
+              <span class="op">CreateBucket</span>
+              <span class="op">DeleteBucket</span>
+              <span class="op">HeadBucket</span>
+              <span class="op">ListBuckets</span>
+              <span class="op">CopyObject</span>
+              <span class="op">DeleteObjects</span>
+              <span class="op">PutBucketTagging</span>
+              <span class="op">GetBucketTagging</span>
+              <span class="op">DeleteBucketTagging</span>
+              <span class="op">GetBucketLocation</span>
+              <span class="op">PutBucketPolicy</span>
+              <span class="op">GetBucketPolicy</span>
+              <span class="op">PutBucketNotificationConfiguration</span>
+              <span class="op">GetBucketNotificationConfiguration</span>
+              <span class="op">CreateMultipartUpload</span>
+              <span class="op">UploadPart</span>
+              <span class="op">CompleteMultipartUpload</span>
+              <span class="op">AbortMultipartUpload</span>
+              <span class="op">ListParts</span>
+            </div>
+          </div>
+          <p class="service-note">Backed by the local filesystem. Supports event notifications (ObjectCreated, ObjectRemoved), multipart uploads, presigned URL generation, ETags, binary content, and content-type headers.</p>
+        </div>
+
+        <div class="service-detail" id="sns">
+          <div class="service-detail-header">
+            <h3>SNS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_sns.Topic</span>
+            </div>
+            <p class="cdk-props"><code>topicName</code>. <code>aws_sns.Subscription</code> is not parsed &mdash; subscriptions are wired at runtime via the API or auto-wired by LDK for Lambda/SQS targets.</p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">Publish</span>
+              <span class="op">Subscribe</span>
+              <span class="op">CreateTopic</span>
+              <span class="op">ListTopics</span>
+              <span class="op">ListSubscriptions</span>
+              <span class="op">DeleteTopic</span>
+              <span class="op">SetTopicAttributes</span>
+              <span class="op">Unsubscribe</span>
+              <span class="op">GetSubscriptionAttributes</span>
+              <span class="op">SetSubscriptionAttributes</span>
+              <span class="op">ConfirmSubscription</span>
+              <span class="op">GetTopicAttributes</span>
+              <span class="op">ListSubscriptionsByTopic</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsForResource</span>
+            </div>
+          </div>
+          <p class="service-note">Supports Lambda and SQS subscription protocols, message attributes, topic and subscription attribute management, and fan-out to multiple subscribers.</p>
+        </div>
+
+        <div class="service-detail" id="eventbridge">
+          <div class="service-detail-header">
+            <h3>EventBridge</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_events.EventBus</span>
+              <span class="cdk">aws_events.Rule</span>
+            </div>
+            <p class="cdk-props"><code>eventBusName</code>, <code>ruleName</code>, <code>eventBus</code>, <code>eventPattern</code>, <code>schedule</code>, <code>targets</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">PutEvents</span>
+              <span class="op">CreateEventBus</span>
+              <span class="op">DescribeEventBus</span>
+              <span class="op">ListEventBuses</span>
+              <span class="op">DeleteEventBus</span>
+              <span class="op">PutRule</span>
+              <span class="op">DescribeRule</span>
+              <span class="op">ListRules</span>
+              <span class="op">DeleteRule</span>
+              <span class="op">EnableRule</span>
+              <span class="op">DisableRule</span>
+              <span class="op">PutTargets</span>
+              <span class="op">ListTargetsByRule</span>
+              <span class="op">RemoveTargets</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsForResource</span>
+            </div>
+          </div>
+          <p class="service-note">Supports custom event buses, event pattern matching, schedule expressions (rate and cron), Lambda targets, and input transformations.</p>
+        </div>
+
+        <div class="service-detail" id="stepfunctions">
+          <div class="service-detail-header">
+            <h3>Step Functions</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_stepfunctions.StateMachine</span>
+            </div>
+            <p class="cdk-props"><code>stateMachineName</code>, <code>definitionBody</code>, <code>stateMachineType</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateStateMachine</span>
+              <span class="op">DescribeStateMachine</span>
+              <span class="op">ListStateMachines</span>
+              <span class="op">DeleteStateMachine</span>
+              <span class="op">UpdateStateMachine</span>
+              <span class="op">StartExecution</span>
+              <span class="op">StartSyncExecution</span>
+              <span class="op">DescribeExecution</span>
+              <span class="op">ListExecutions</span>
+              <span class="op">StopExecution</span>
+              <span class="op">GetExecutionHistory</span>
+              <span class="op">ListStateMachineVersions</span>
+              <span class="op">ValidateStateMachineDefinition</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsForResource</span>
+            </div>
+          </div>
+          <p class="service-note">State types: Task, Pass, Choice, Wait, Succeed, Fail, Parallel, Map. Supports JSONPath (InputPath, OutputPath, ResultPath), error handling (Retry, Catch), definition validation, and Standard &amp; Express workflows.</p>
+        </div>
+
+        <div class="service-detail" id="cognito">
+          <div class="service-detail-header">
+            <h3>Cognito</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_cognito.UserPool</span>
+              <span class="cdk">aws_cognito.UserPoolClient</span>
+            </div>
+            <p class="cdk-props"><code>userPoolName</code>, <code>lambdaTriggers</code> (preAuthentication, postConfirmation), <code>passwordPolicy</code>, <code>userPool</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateUserPool</span>
+              <span class="op">DescribeUserPool</span>
+              <span class="op">ListUserPools</span>
+              <span class="op">DeleteUserPool</span>
+              <span class="op">UpdateUserPool</span>
+              <span class="op">CreateUserPoolClient</span>
+              <span class="op">DescribeUserPoolClient</span>
+              <span class="op">ListUserPoolClients</span>
+              <span class="op">DeleteUserPoolClient</span>
+              <span class="op">SignUp</span>
+              <span class="op">ConfirmSignUp</span>
+              <span class="op">InitiateAuth</span>
+              <span class="op">ForgotPassword</span>
+              <span class="op">ConfirmForgotPassword</span>
+              <span class="op">ChangePassword</span>
+              <span class="op">GlobalSignOut</span>
+              <span class="op">AdminCreateUser</span>
+              <span class="op">AdminDeleteUser</span>
+              <span class="op">AdminGetUser</span>
+              <span class="op">ListUsers</span>
+              <span class="op">JWKS</span>
+            </div>
+          </div>
+          <p class="service-note">Backed by SQLite. Supports JWT token generation (ID, access, refresh), user attributes, password hashing, password reset flows, and multi-pool management.</p>
+        </div>
+
+        <div class="service-detail" id="lambda">
+          <div class="service-detail-header">
+            <h3>Lambda</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_lambda.Function</span>
+            </div>
+            <p class="cdk-props"><code>handler</code>, <code>runtime</code>, <code>code</code>, <code>timeout</code>, <code>memorySize</code>, <code>environment</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>Management API (Terraform mode)</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateFunction</span>
+              <span class="op">GetFunction</span>
+              <span class="op">DeleteFunction</span>
+              <span class="op">ListFunctions</span>
+              <span class="op">Invoke</span>
+              <span class="op">UpdateFunctionConfiguration</span>
+              <span class="op">UpdateFunctionCode</span>
+              <span class="op">CreateEventSourceMapping</span>
+              <span class="op">GetEventSourceMapping</span>
+              <span class="op">DeleteEventSourceMapping</span>
+              <span class="op">ListEventSourceMappings</span>
+              <span class="op">AddPermission</span>
+              <span class="op">RemovePermission</span>
+              <span class="op">GetPolicy</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTags</span>
+            </div>
+          </div>
+          <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, and environment variable injection. In CDK mode, functions are discovered from the cloud assembly. In Terraform mode, functions are created dynamically via the management API.</p>
+        </div>
+
+        <div class="service-detail" id="apigateway">
+          <div class="service-detail-header">
+            <h3>API Gateway</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_apigateway.RestApi</span>
+              <span class="cdk">aws_apigatewayv2.HttpApi</span>
+            </div>
+            <p class="cdk-props"><code>routes</code>, <code>methods</code>, <code>integrations</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>REST API (V1) Management</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateRestApi</span>
+              <span class="op">GetRestApi</span>
+              <span class="op">ListRestApis</span>
+              <span class="op">UpdateRestApi</span>
+              <span class="op">DeleteRestApi</span>
+              <span class="op">CreateResource</span>
+              <span class="op">GetResources</span>
+              <span class="op">DeleteResource</span>
+              <span class="op">PutMethod</span>
+              <span class="op">GetMethod</span>
+              <span class="op">DeleteMethod</span>
+              <span class="op">PutMethodResponse</span>
+              <span class="op">GetMethodResponse</span>
+              <span class="op">PutIntegration</span>
+              <span class="op">GetIntegration</span>
+              <span class="op">DeleteIntegration</span>
+              <span class="op">PutIntegrationResponse</span>
+              <span class="op">GetIntegrationResponse</span>
+              <span class="op">TestInvokeMethod</span>
+              <span class="op">CreateDeployment</span>
+              <span class="op">GetDeployment</span>
+              <span class="op">ListDeployments</span>
+              <span class="op">CreateStage</span>
+              <span class="op">GetStage</span>
+              <span class="op">UpdateStage</span>
+              <span class="op">DeleteStage</span>
+              <span class="op">CreateAuthorizer</span>
+              <span class="op">GetAuthorizer</span>
+              <span class="op">ListAuthorizers</span>
+            </div>
+          </div>
+          <div class="service-detail-section">
+            <h4>HTTP API (V2) Management</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateApi</span>
+              <span class="op">GetApi</span>
+              <span class="op">ListApis</span>
+              <span class="op">UpdateApi</span>
+              <span class="op">DeleteApi</span>
+              <span class="op">CreateRoute</span>
+              <span class="op">GetRoute</span>
+              <span class="op">ListRoutes</span>
+              <span class="op">DeleteRoute</span>
+              <span class="op">CreateIntegration</span>
+              <span class="op">GetIntegration</span>
+              <span class="op">ListIntegrations</span>
+              <span class="op">DeleteIntegration</span>
+              <span class="op">CreateStage</span>
+              <span class="op">GetStage</span>
+              <span class="op">ListStages</span>
+              <span class="op">UpdateStage</span>
+              <span class="op">DeleteStage</span>
+              <span class="op">CreateAuthorizer</span>
+              <span class="op">GetAuthorizer</span>
+              <span class="op">ListAuthorizers</span>
+            </div>
+          </div>
+          <p class="service-note">Supports both REST API (V1) and HTTP API (V2) with Lambda proxy integration. Features include CORS handling, TOKEN and JWT authorizers, multi-value query parameters, multi-value headers, binary payload support (base64 encoding), path parameters, and request/response mapping. In Terraform mode, APIs and routes are created dynamically via the management API.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Configuration &amp; Secrets</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="ssm">
+          <div class="service-detail-header">
+            <h3>SSM Parameter Store</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_ssm.StringParameter</span>
+            </div>
+            <p class="cdk-props"><code>Name</code>, <code>Type</code>, <code>Value</code>, <code>Description</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">PutParameter</span>
+              <span class="op">GetParameter</span>
+              <span class="op">GetParameters</span>
+              <span class="op">GetParametersByPath</span>
+              <span class="op">DeleteParameter</span>
+              <span class="op">DeleteParameters</span>
+              <span class="op">DescribeParameters</span>
+              <span class="op">AddTagsToResource</span>
+              <span class="op">RemoveTagsFromResource</span>
+              <span class="op">ListTagsForResource</span>
+            </div>
+          </div>
+          <p class="service-note">In-memory parameter store supporting String, StringList, and SecureString types with hierarchical paths, tagging, and version tracking. In CDK mode, parameters defined in the CloudFormation template are pre-seeded on startup.</p>
+        </div>
+
+        <div class="service-detail" id="secretsmanager">
+          <div class="service-detail-header">
+            <h3>Secrets Manager</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_secretsmanager.Secret</span>
+            </div>
+            <p class="cdk-props"><code>Name</code>, <code>Description</code>, <code>SecretString</code>, <code>GenerateSecretString</code></p>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateSecret</span>
+              <span class="op">GetSecretValue</span>
+              <span class="op">PutSecretValue</span>
+              <span class="op">UpdateSecret</span>
+              <span class="op">DeleteSecret</span>
+              <span class="op">RestoreSecret</span>
+              <span class="op">ListSecrets</span>
+              <span class="op">DescribeSecret</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListSecretVersionIds</span>
+              <span class="op">GetResourcePolicy</span>
+            </div>
+          </div>
+          <p class="service-note">In-memory secret store with version tracking (AWSCURRENT/AWSPREVIOUS staging labels), soft delete/restore, resource policies, and tagging support. In CDK mode, secrets defined in the CloudFormation template are pre-seeded on startup.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Container Services</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="ecs">
+          <div class="service-detail-header">
+            <h3>ECS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>CDK Constructs</h4>
+            <div class="service-detail-ops">
+              <span class="cdk">aws_ecs.TaskDefinition</span>
+              <span class="cdk">aws_ecs.FargateService</span>
+              <span class="cdk">aws_ecs.Ec2Service</span>
+            </div>
+            <p class="cdk-props"><code>containerDefinitions</code>, <code>taskDefinition</code></p>
+          </div>
+          <p class="service-note">Runs services as local subprocesses. Supports health checking, service discovery, file watching with auto-restart, and port mapping. Supports local command overrides via <code>ldk.local_command</code> metadata. CDK mode only.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Identity</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="iam-sts">
+          <div class="service-detail-header">
+            <h3>IAM &amp; STS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>IAM Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateRole</span>
+              <span class="op">GetRole</span>
+              <span class="op">DeleteRole</span>
+              <span class="op">CreatePolicy</span>
+              <span class="op">AttachRolePolicy</span>
+              <span class="op">PutRolePolicy</span>
+              <span class="op">ListRoles</span>
+              <span class="op">ListPolicies</span>
+            </div>
+          </div>
+          <div class="service-detail-section">
+            <h4>STS Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">GetCallerIdentity</span>
+              <span class="op">AssumeRole</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs that return AWS-compatible responses for Terraform compatibility. IAM role and policy operations are accepted and stored in memory. STS returns dummy credentials and caller identity. These stubs allow <code>terraform apply</code> to succeed without a real AWS account.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Database Stubs</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="rds">
+          <div class="service-detail-header">
+            <h3>RDS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+              <span class="op">CreateDBInstance</span>
+              <span class="op">DescribeDBInstances</span>
+              <span class="op">DeleteDBInstance</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports cluster and instance lifecycle operations with identifier-based filtering.</p>
+        </div>
+
+        <div class="service-detail" id="documentdb">
+          <div class="service-detail-header">
+            <h3>DocumentDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports MongoDB-compatible cluster lifecycle operations.</p>
+        </div>
+
+        <div class="service-detail" id="neptune">
+          <div class="service-detail-header">
+            <h3>Neptune</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports graph database cluster lifecycle with Gremlin endpoint exposure.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Search &amp; Cache Stubs</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="elasticsearch">
+          <div class="service-detail-header">
+            <h3>Elasticsearch</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateElasticsearchDomain</span>
+              <span class="op">DescribeElasticsearchDomains</span>
+              <span class="op">DeleteElasticsearchDomain</span>
+              <span class="op">ListElasticsearchDomainNames</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+        </div>
+
+        <div class="service-detail" id="opensearch">
+          <div class="service-detail-header">
+            <h3>OpenSearch</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDomain</span>
+              <span class="op">DescribeDomains</span>
+              <span class="op">DeleteDomain</span>
+              <span class="op">ListDomainNames</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+        </div>
+
+        <div class="service-detail" id="elasticache">
+          <div class="service-detail-header">
+            <h3>ElastiCache</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateCacheCluster</span>
+              <span class="op">DescribeCacheClusters</span>
+              <span class="op">DeleteCacheCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports cache cluster lifecycle with status tracking.</p>
+        </div>
+
+        <div class="service-detail" id="memorydb">
+          <div class="service-detail-header">
+            <h3>MemoryDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateCluster</span>
+              <span class="op">DescribeClusters</span>
+              <span class="op">DeleteCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports Redis-compatible cluster lifecycle with status tracking.</p>
+        </div>
+      </div>
+
+      <h3 class="service-category">Storage Stubs</h3>
+
+      <div class="services-list">
+        <div class="service-detail" id="glacier">
+          <div class="service-detail-header">
+            <h3>Glacier</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateVault</span>
+              <span class="op">ListVaults</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports idempotent vault creation and listing.</p>
+        </div>
+
+        <div class="service-detail" id="s3tables">
+          <div class="service-detail-header">
+            <h3>S3 Tables</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateTableBucket</span>
+              <span class="op">ListTableBuckets</span>
+              <span class="op">CreateTable</span>
+              <span class="op">ListTables</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports table buckets with namespace-based table organization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>Run AWS CDK &amp; Terraform apps locally</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

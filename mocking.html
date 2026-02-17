@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Servers - Local Web Services</title>
+  <meta name="description" content="Create mock HTTP, GraphQL, and gRPC servers for external API dependencies. Define routes, use template variables, and import from OpenAPI specs.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="mocking.html" class="nav-active">Mocking</a></li>
+        <li><a href="chaos.html">Chaos</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Mock Servers</h1>
+      <p class="section-lead">Create local mock servers for external API dependencies &mdash; payment processors, third-party services, partner APIs &mdash; so your entire application runs locally without any external calls.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h2>Why Mock External APIs?</h2>
+      <p class="section-lead">Your application doesn't exist in isolation. It calls Stripe for payments, Twilio for SMS, SendGrid for email, or internal microservices owned by other teams. Without mocks, you need live credentials, network access, and real API limits just to develop locally.</p>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">$0</div>
+          <h3>No API Costs</h3>
+          <p>Stop burning through sandbox credits and rate limits during development. Mock servers return realistic responses without making real API calls.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&empty;</div>
+          <h3>No Credentials Needed</h3>
+          <p>New developers don't need API keys for every third-party service. Mock servers work out of the box with zero configuration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>How It Works</h2>
+      <p class="section-lead">Mock servers integrate directly into your local development environment alongside AWS service emulations.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Create a Mock Server</h3>
+            <p>Define a mock server for each external dependency. Give it a name and optional base configuration.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock create --name stripe-api</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Add Routes</h3>
+            <p>Define the endpoints your code calls, with the responses you want returned. Use CLI commands or YAML configuration.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock add-route \
+  --name stripe-api \
+  --method POST --path /v1/charges \
+  --status 200 \
+  --body '{"id": "ch_{{uuid}}", "status": "succeeded"}'</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Start with ldk dev</h3>
+            <p>Mock servers start automatically alongside your AWS services when you run <code>ldk dev</code>. Each mock gets its own local endpoint.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Point Your Code</h3>
+            <p>Configure your application to use the local mock endpoint instead of the real API. Environment variables are injected automatically for services defined in your IaC.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Protocol Support</h2>
+      <p class="section-lead">Mock servers support the protocols your external dependencies use.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">REST</div>
+          <h3>REST / HTTP</h3>
+          <p>Full HTTP method support (GET, POST, PUT, PATCH, DELETE). Match requests by path, headers, query parameters, and body fields. Return custom status codes, headers, and JSON/text bodies.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">GQL</div>
+          <h3>GraphQL</h3>
+          <p>Match GraphQL queries and mutations by operation name. Return typed response data with support for variables, nested objects, and error responses.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">gRPC</div>
+          <h3>gRPC</h3>
+          <p>Define service methods and return protobuf-compatible JSON responses. Supports unary calls with status codes and metadata.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Defining Routes</h2>
+      <p class="section-lead">Routes define how your mock server responds to incoming requests. Configure them via CLI or YAML.</p>
+
+      <h3 class="section-subheading">Basic Route</h3>
+      <div class="config-example">
+        <div class="code-block"><code>routes:
+  - method: POST
+    path: /v1/charges
+    status: 200
+    headers:
+      Content-Type: application/json
+    body: |
+      {
+        "id": "ch_{{uuid}}",
+        "amount": {{body.amount}},
+        "currency": "{{body.currency}}",
+        "status": "succeeded",
+        "created": {{timestamp}}
+      }</code></div>
+      </div>
+
+      <h3 class="section-subheading">Conditional Matching</h3>
+      <p class="section-lead">Routes can match on headers, query parameters, and body fields to return different responses for different inputs.</p>
+      <div class="config-example">
+        <div class="code-block"><code>routes:
+  # Match by header
+  - method: GET
+    path: /v1/customers
+    match:
+      headers:
+        Authorization: "Bearer sk_test_valid"
+    status: 200
+    body: '{"data": [{"id": "cus_123"}]}'
+
+  # Match by query parameter
+  - method: GET
+    path: /v1/customers
+    match:
+      query:
+        email: "not-found@example.com"
+    status: 200
+    body: '{"data": []}'
+
+  # Match by body field
+  - method: POST
+    path: /v1/charges
+    match:
+      body:
+        amount: 99999
+    status: 402
+    body: '{"error": {"type": "card_error", "message": "Card declined"}}'</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Template Variables</h2>
+      <p class="section-lead">Use template variables in response bodies to generate dynamic, realistic responses.</p>
+
+      <div class="services-list">
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>Available Variables</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>Built-in Generators</h4>
+            <div class="service-detail-ops">
+              <span class="op">{{uuid}}</span>
+              <span class="op">{{timestamp}}</span>
+              <span class="op">{{random_int(min,max)}}</span>
+              <span class="op">{{random_choice(a,b,c)}}</span>
+            </div>
+          </div>
+          <div class="service-detail-section">
+            <h4>Request Data</h4>
+            <div class="service-detail-ops">
+              <span class="op">{{path.paramName}}</span>
+              <span class="op">{{query.paramName}}</span>
+              <span class="op">{{header.name}}</span>
+              <span class="op">{{body.field}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-subheading">Example</h3>
+      <div class="config-example">
+        <div class="code-block"><code>routes:
+  - method: POST
+    path: /v1/payments
+    status: 200
+    body: |
+      {
+        "id": "pay_{{uuid}}",
+        "amount": {{body.amount}},
+        "currency": "{{body.currency}}",
+        "status": "{{random_choice(succeeded,pending,requires_action)}}",
+        "created": {{timestamp}},
+        "receipt_number": {{random_int(1000,9999)}}
+      }</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>OpenAPI Import</h2>
+      <p class="section-lead">Automatically generate mock routes from existing OpenAPI 3.x or Swagger 2.x specifications.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Import a Spec</h3>
+            <p>Point <code>lws mock import-spec</code> at an OpenAPI file. Routes are generated for every endpoint with example responses from the spec.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock import-spec \
+  --name stripe-api \
+  --spec openapi.yaml</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Validate Coverage</h3>
+            <p>Check that your mock covers all the endpoints your code actually calls. The validate command compares your mock routes against the spec and reports missing coverage.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock validate \
+  --name stripe-api \
+  --spec openapi.yaml</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>Run AWS CDK &amp; Terraform apps locally</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

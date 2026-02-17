@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI Reference - Local Web Services</title>
+  <meta name="description" content="Complete command reference for the ldk and lws CLI tools.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="mocking.html">Mocking</a></li>
+        <li><a href="chaos.html">Chaos</a></li>
+        <li><a href="cli.html" class="nav-active">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>CLI Reference</h1>
+      <p class="section-lead">Complete command reference for both <code>ldk</code> and <code>lws</code> tools.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h2>LDK Commands</h2>
+
+      <div class="cli-detail">
+        <div class="code-block"><code>uvx --from local-web-services ldk dev [OPTIONS]</code></div>
+        <h3>ldk dev</h3>
+        <p>Start the full local environment with hot-reload. Watches your source files and restarts handlers on change.</p>
+        <ul class="option-list">
+          <li><code>--port, -p</code> <span>API Gateway listen port (default: 3000)</span></li>
+          <li><code>--no-persist</code> <span>Disable data persistence &mdash; data is lost when ldk stops</span></li>
+          <li><code>--force-synth</code> <span>Force CDK synth even if cdk.out exists</span></li>
+          <li><code>--log-level, -l</code> <span>Log level: debug, info, warning, error (default: info)</span></li>
+          <li><code>--project-dir, -d</code> <span>Project root directory (default: current directory)</span></li>
+          <li><code>--mode, -m</code> <span>Project mode: cdk or terraform (default: auto-detect from project files)</span></li>
+        </ul>
+      </div>
+
+      <div class="cli-detail">
+        <div class="code-block"><code>uvx --from local-web-services ldk invoke [OPTIONS]</code></div>
+        <h3>ldk invoke</h3>
+        <p>Invoke a Lambda function directly with a JSON event payload. Useful for testing handlers in isolation.</p>
+        <ul class="option-list">
+          <li><code>--function-name, -f</code> <span>Lambda function name (required)</span></li>
+          <li><code>--event, -e</code> <span>Inline JSON event payload</span></li>
+          <li><code>--event-file</code> <span>Path to JSON event file</span></li>
+          <li><code>--project-dir, -d</code> <span>Project root directory (default: current directory)</span></li>
+          <li><code>--port, -p</code> <span>Management API port to connect to running ldk dev</span></li>
+        </ul>
+      </div>
+
+      <div class="cli-detail">
+        <div class="code-block"><code>uvx --from local-web-services ldk reset [OPTIONS]</code></div>
+        <h3>ldk reset</h3>
+        <p>Clear all persisted local state &mdash; databases, queues, buckets. Start fresh.</p>
+        <ul class="option-list">
+          <li><code>--yes, -y</code> <span>Skip confirmation prompt</span></li>
+          <li><code>--project-dir, -d</code> <span>Project root directory (default: current directory)</span></li>
+          <li><code>--port, -p</code> <span>Management API port to notify running ldk dev</span></li>
+        </ul>
+      </div>
+
+      <div class="cli-detail">
+        <div class="code-block"><code>uvx --from local-web-services ldk setup SERVICE [OPTIONS]</code></div>
+        <h3>ldk setup</h3>
+        <p>Pull Docker images required for local service emulation. Currently supports <code>lambda</code> which pulls official AWS Lambda base images from ECR Public (includes AWS SDK pre-installed).</p>
+        <ul class="option-list">
+          <li><code>SERVICE</code> <span>Service to set up (currently: <code>lambda</code>)</span></li>
+          <li><code>--runtime, -r</code> <span>Pull only a specific runtime (e.g. <code>python3.12</code>, <code>nodejs20.x</code>)</span></li>
+        </ul>
+        <div class="code-block" style="margin-top: 12px;"><code># Pull all Lambda runtime images
+uvx --from local-web-services ldk setup lambda
+
+# Pull a specific runtime only
+uvx --from local-web-services ldk setup lambda --runtime python3.12</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>LWS Commands</h2>
+      <p class="section-lead">AWS CLI-style commands for interacting with your local services. Requires a running <code>ldk dev</code> instance.</p>
+
+      <div class="lws-command-grid">
+        <div class="lws-command">
+          <h4>lws status</h4>
+          <p>Show the status of the running ldk dev instance and all providers.</p>
+          <div class="code-block"><code>uvx --from local-web-services lws status</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws dynamodb</h4>
+          <p>DynamoDB table operations.</p>
+          <div>
+            <span class="subcmd">put-item</span>
+            <span class="subcmd">get-item</span>
+            <span class="subcmd">delete-item</span>
+            <span class="subcmd">scan</span>
+            <span class="subcmd">query</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws dynamodb scan \
+  --table-name MyTable</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws sqs</h4>
+          <p>SQS queue operations.</p>
+          <div>
+            <span class="subcmd">send-message</span>
+            <span class="subcmd">receive-message</span>
+            <span class="subcmd">delete-message</span>
+            <span class="subcmd">get-queue-attributes</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws sqs receive-message \
+  --queue-name MyQueue</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws s3api</h4>
+          <p>S3 bucket operations.</p>
+          <div>
+            <span class="subcmd">put-object</span>
+            <span class="subcmd">get-object</span>
+            <span class="subcmd">delete-object</span>
+            <span class="subcmd">list-objects-v2</span>
+            <span class="subcmd">head-object</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws s3api list-objects-v2 \
+  --bucket my-bucket</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws sns</h4>
+          <p>SNS topic operations.</p>
+          <div>
+            <span class="subcmd">publish</span>
+            <span class="subcmd">list-topics</span>
+            <span class="subcmd">list-subscriptions</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws sns publish \
+  --topic-name MyTopic \
+  --message "Hello"</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws events</h4>
+          <p>EventBridge operations.</p>
+          <div>
+            <span class="subcmd">put-events</span>
+            <span class="subcmd">list-rules</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws events put-events \
+  --entries '[{...}]'</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws stepfunctions</h4>
+          <p>Step Functions operations.</p>
+          <div>
+            <span class="subcmd">start-execution</span>
+            <span class="subcmd">describe-execution</span>
+            <span class="subcmd">list-executions</span>
+            <span class="subcmd">list-state-machines</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws stepfunctions start-execution \
+  --name MyStateMachine \
+  --input '{...}'</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws cognito-idp</h4>
+          <p>Cognito User Pool operations.</p>
+          <div>
+            <span class="subcmd">sign-up</span>
+            <span class="subcmd">confirm-sign-up</span>
+            <span class="subcmd">initiate-auth</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws cognito-idp sign-up \
+  --user-pool-name MyPool \
+  --username user@example.com</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws ssm</h4>
+          <p>SSM Parameter Store operations.</p>
+          <div>
+            <span class="subcmd">put-parameter</span>
+            <span class="subcmd">get-parameter</span>
+            <span class="subcmd">get-parameters-by-path</span>
+            <span class="subcmd">delete-parameter</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws ssm put-parameter \
+  --name /app/config/key \
+  --value "my-value" \
+  --type String</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws secretsmanager</h4>
+          <p>Secrets Manager operations.</p>
+          <div>
+            <span class="subcmd">create-secret</span>
+            <span class="subcmd">get-secret-value</span>
+            <span class="subcmd">put-secret-value</span>
+            <span class="subcmd">list-secrets</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws secretsmanager create-secret \
+  --name MySecret \
+  --secret-string "my-secret-value"</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws apigateway</h4>
+          <p>API Gateway test invocation.</p>
+          <div>
+            <span class="subcmd">test-invoke-method</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws apigateway test-invoke-method \
+  --resource /orders \
+  --http-method GET</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws mock</h4>
+          <p>Mock server management. Create and manage mock HTTP/GraphQL/gRPC servers for external API dependencies.</p>
+          <div>
+            <span class="subcmd">create</span>
+            <span class="subcmd">delete</span>
+            <span class="subcmd">list</span>
+            <span class="subcmd">status</span>
+            <span class="subcmd">add-route</span>
+            <span class="subcmd">remove-route</span>
+            <span class="subcmd">import-spec</span>
+            <span class="subcmd">validate</span>
+            <span class="subcmd">chaos</span>
+            <span class="subcmd">invoke</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code># Create a mock server
+uvx --from local-web-services lws mock create --name stripe-api
+
+# Add a route
+uvx --from local-web-services lws mock add-route \
+  --name stripe-api \
+  --method POST --path /v1/charges \
+  --status 200 --body '{"id": "ch_{{uuid}}"}'
+
+# Import from OpenAPI spec
+uvx --from local-web-services lws mock import-spec \
+  --name stripe-api \
+  --spec openapi.yaml
+
+# Enable chaos testing
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --error-rate 0.1</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>Run AWS CDK &amp; Terraform apps locally</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

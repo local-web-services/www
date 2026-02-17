@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chaos Engineering - Local Web Services</title>
+  <meta name="description" content="Test failure handling before production with configurable error rates, latency injection, timeouts, and connection resets.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="mocking.html">Mocking</a></li>
+        <li><a href="chaos.html" class="nav-active">Chaos</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Chaos Engineering</h1>
+      <p class="section-lead">Test how your application handles failures before they happen in production. Inject errors, latency, timeouts, and connection resets into your mock servers to verify resilience.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h2>Why Test Failure Handling?</h2>
+      <p class="section-lead">External APIs fail. Networks drop. Services slow down. If you only test the happy path, you'll discover your error handling is broken when it matters most &mdash; in production, at 2 AM, during a traffic spike.</p>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">!</div>
+          <h3>Failures Are Inevitable</h3>
+          <p>Every external dependency will fail eventually. The question isn't whether, but how your application handles it when it does.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&check;</div>
+          <h3>Test Before Production</h3>
+          <p>Chaos engineering in local development lets you verify retry logic, circuit breakers, and fallbacks work correctly before deployment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Failure Modes</h2>
+      <p class="section-lead">Four configurable failure modes simulate real-world failure scenarios.</p>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">500</div>
+          <h3>Error Rate</h3>
+          <p>A configurable percentage of requests return HTTP 500 or 503 errors instead of the normal response. Supports weighted status codes so you can simulate specific error distributions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#8987;</div>
+          <h3>Latency Injection</h3>
+          <p>Add random delay to responses between a minimum and maximum duration (in milliseconds). Simulates slow network conditions and overloaded services.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#8734;</div>
+          <h3>Timeout Simulation</h3>
+          <p>A configurable percentage of requests hang indefinitely, never returning a response. Tests whether your application's timeout settings and cancellation logic work correctly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9249;</div>
+          <h3>Connection Reset</h3>
+          <p>A configurable percentage of requests have the TCP connection dropped mid-request. Simulates network failures, load balancer issues, and infrastructure problems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Configuration</h2>
+      <p class="section-lead">Configure chaos settings via YAML or CLI commands.</p>
+
+      <h3 class="section-subheading">YAML Configuration</h3>
+      <div class="config-example">
+        <div class="code-block"><code>chaos:
+  error_rate: 0.1              # 10% of requests return errors
+  error_status_codes:
+    - status: 500
+      weight: 7                # 70% of errors are 500s
+    - status: 503
+      weight: 3                # 30% of errors are 503s
+  latency:
+    min_ms: 200                # minimum added delay
+    max_ms: 2000               # maximum added delay
+  timeout_rate: 0.05           # 5% of requests hang
+  connection_reset_rate: 0.02  # 2% of connections drop</code></div>
+      </div>
+
+      <h3 class="section-subheading">CLI Commands</h3>
+      <div class="config-example">
+        <div class="code-block"><code># Enable error injection on a mock server
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --error-rate 0.1
+
+# Add latency injection
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --latency-min 200 --latency-max 2000
+
+# Enable timeout simulation
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --timeout-rate 0.05
+
+# Enable connection resets
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --connection-reset-rate 0.02
+
+# Disable all chaos
+uvx --from local-web-services lws mock chaos \
+  --name stripe-api \
+  --disable</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Runtime Toggling</h2>
+      <p class="section-lead">Enable or disable chaos on running mock servers without restarting <code>ldk dev</code>. Adjust failure rates on the fly to test different scenarios.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Start Normal</h3>
+            <p>Run your application with mock servers in normal mode. Verify the happy path works.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Enable Chaos</h3>
+            <p>Turn on failure injection while the application is running. No restart needed.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock chaos --name stripe-api --error-rate 0.5</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Observe Behavior</h3>
+            <p>Watch how your application reacts to failures. Check logs, retry behavior, and user-facing error messages.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Disable and Fix</h3>
+            <p>Turn chaos off, fix any issues, and repeat.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws mock chaos --name stripe-api --disable</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Use Cases</h2>
+      <p class="section-lead">Common resilience patterns you can validate with chaos testing.</p>
+
+      <div class="goals-grid">
+        <div class="goal-card">
+          <h3>Retry Logic</h3>
+          <p>Verify that transient errors trigger retries with proper backoff. Confirm that non-retryable errors fail fast instead of wasting time.</p>
+        </div>
+        <div class="goal-card">
+          <h3>Circuit Breakers</h3>
+          <p>Test that circuit breakers open after enough failures and close again when the service recovers. Verify fallback responses during open state.</p>
+        </div>
+        <div class="goal-card">
+          <h3>Graceful Degradation</h3>
+          <p>Confirm your application still functions when a dependency is down. Non-critical features should degrade, not crash the entire system.</p>
+        </div>
+        <div class="goal-card">
+          <h3>Timeout Handling</h3>
+          <p>Ensure your HTTP clients have proper timeout settings and handle them gracefully. Hanging requests should not block the event loop or exhaust connection pools.</p>
+        </div>
+        <div class="goal-card">
+          <h3>Dead Letter Queues</h3>
+          <p>Verify that failed messages are routed to DLQs after exhausting retries. Confirm alerting and monitoring triggers on DLQ activity.</p>
+        </div>
+        <div class="goal-card">
+          <h3>Error Reporting</h3>
+          <p>Confirm that errors from external services are properly logged, reported to monitoring tools, and surfaced to users with helpful messages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>Run AWS CDK &amp; Terraform apps locally</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
