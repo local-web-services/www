@@ -213,7 +213,7 @@ No credentials. No cost. No waiting.</p>
           <div class="step-number">2</div>
           <div class="step-content">
             <h3>Start All Services</h3>
-            <p>All AWS service providers start in always-on mode — DynamoDB, SQS, S3, SNS, EventBridge, Step Functions, Cognito, API Gateway, Lambda, IAM, STS, SSM Parameter Store, and Secrets Manager. Each service gets its own port.</p>
+            <p>All AWS service providers start in always-on mode — DynamoDB, SQS, S3, SNS, EventBridge, Step Functions, Cognito, API Gateway, Lambda, IAM, STS, SSM Parameter Store, Secrets Manager, and more. Each service gets its own port.</p>
           </div>
         </div>
         <div class="step">
@@ -392,10 +392,14 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">TransactWriteItems</span>
               <span class="op">UpdateTable</span>
               <span class="op">DescribeContinuousBackups</span>
+              <span class="op">DescribeTimeToLive</span>
               <span class="op">UpdateTimeToLive</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsOfResource</span>
             </div>
           </div>
-          <p class="service-note">Backed by SQLite. Supports expression attribute names/values, filter expressions, and eventual consistency simulation.</p>
+          <p class="service-note">Backed by SQLite. Supports expression attribute names/values, filter expressions, condition expressions, transactional operations, and eventual consistency simulation.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -426,9 +430,12 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">ChangeMessageVisibility</span>
               <span class="op">ChangeMessageVisibilityBatch</span>
               <span class="op">ListDeadLetterSourceQueues</span>
+              <span class="op">TagQueue</span>
+              <span class="op">UntagQueue</span>
+              <span class="op">ListQueueTags</span>
             </div>
           </div>
-          <p class="service-note">Supports message attributes, long polling, and dead-letter queue wiring from RedrivePolicy.</p>
+          <p class="service-note">Supports message attributes, long polling, FIFO queues, batch operations, and dead-letter queue wiring from RedrivePolicy.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -463,10 +470,14 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">GetBucketPolicy</span>
               <span class="op">PutBucketNotificationConfiguration</span>
               <span class="op">GetBucketNotificationConfiguration</span>
-              <span class="op-no">CreateMultipartUpload</span>
+              <span class="op">CreateMultipartUpload</span>
+              <span class="op">UploadPart</span>
+              <span class="op">CompleteMultipartUpload</span>
+              <span class="op">AbortMultipartUpload</span>
+              <span class="op">ListParts</span>
             </div>
           </div>
-          <p class="service-note">Backed by the local filesystem. Supports event notifications (ObjectCreated, ObjectRemoved), presigned URL generation, ETags, and content-type headers.</p>
+          <p class="service-note">Backed by the local filesystem. Supports event notifications (ObjectCreated, ObjectRemoved), multipart uploads, presigned URL generation, ETags, binary content, and content-type headers.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -493,10 +504,14 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">GetSubscriptionAttributes</span>
               <span class="op">SetSubscriptionAttributes</span>
               <span class="op">ConfirmSubscription</span>
+              <span class="op">GetTopicAttributes</span>
               <span class="op">ListSubscriptionsByTopic</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsForResource</span>
             </div>
           </div>
-          <p class="service-note">Supports Lambda and SQS subscription protocols, message attributes, and fan-out to multiple subscribers.</p>
+          <p class="service-note">Supports Lambda and SQS subscription protocols, message attributes, topic and subscription attribute management, and fan-out to multiple subscribers.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -514,22 +529,25 @@ uvx --from local-web-services lws stepfunctions start-execution \
             <h4>API Operations</h4>
             <div class="service-detail-ops">
               <span class="op">PutEvents</span>
-              <span class="op">PutRule</span>
-              <span class="op">PutTargets</span>
-              <span class="op">ListRules</span>
+              <span class="op">CreateEventBus</span>
+              <span class="op">DescribeEventBus</span>
               <span class="op">ListEventBuses</span>
-              <span class="op">RemoveTargets</span>
-              <span class="op">DeleteRule</span>
+              <span class="op">DeleteEventBus</span>
+              <span class="op">PutRule</span>
               <span class="op">DescribeRule</span>
-              <span class="op">ListTargetsByRule</span>
+              <span class="op">ListRules</span>
+              <span class="op">DeleteRule</span>
               <span class="op">EnableRule</span>
               <span class="op">DisableRule</span>
+              <span class="op">PutTargets</span>
+              <span class="op">ListTargetsByRule</span>
+              <span class="op">RemoveTargets</span>
               <span class="op">TagResource</span>
               <span class="op">UntagResource</span>
               <span class="op">ListTagsForResource</span>
             </div>
           </div>
-          <p class="service-note">Supports event pattern matching, schedule expressions (rate and cron), Lambda targets, and input transformations.</p>
+          <p class="service-note">Supports custom event buses, event pattern matching, schedule expressions (rate and cron), Lambda targets, and input transformations.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -545,18 +563,25 @@ uvx --from local-web-services lws stepfunctions start-execution \
           <div class="service-detail-section">
             <h4>API Operations</h4>
             <div class="service-detail-ops">
+              <span class="op">CreateStateMachine</span>
+              <span class="op">DescribeStateMachine</span>
+              <span class="op">ListStateMachines</span>
+              <span class="op">DeleteStateMachine</span>
+              <span class="op">UpdateStateMachine</span>
               <span class="op">StartExecution</span>
               <span class="op">StartSyncExecution</span>
               <span class="op">DescribeExecution</span>
               <span class="op">ListExecutions</span>
-              <span class="op">ListStateMachines</span>
-              <span class="op">CreateStateMachine</span>
               <span class="op">StopExecution</span>
               <span class="op">GetExecutionHistory</span>
-              <span class="op">UpdateStateMachine</span>
+              <span class="op">ListStateMachineVersions</span>
+              <span class="op">ValidateStateMachineDefinition</span>
+              <span class="op">TagResource</span>
+              <span class="op">UntagResource</span>
+              <span class="op">ListTagsForResource</span>
             </div>
           </div>
-          <p class="service-note">State types: Task, Pass, Choice, Wait, Succeed, Fail, Parallel, Map. Supports JSONPath (InputPath, OutputPath, ResultPath), error handling (Retry, Catch), and Standard &amp; Express workflows.</p>
+          <p class="service-note">State types: Task, Pass, Choice, Wait, Succeed, Fail, Parallel, Map. Supports JSONPath (InputPath, OutputPath, ResultPath), error handling (Retry, Catch), definition validation, and Standard &amp; Express workflows.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -573,25 +598,30 @@ uvx --from local-web-services lws stepfunctions start-execution \
           <div class="service-detail-section">
             <h4>API Operations</h4>
             <div class="service-detail-ops">
+              <span class="op">CreateUserPool</span>
+              <span class="op">DescribeUserPool</span>
+              <span class="op">ListUserPools</span>
+              <span class="op">DeleteUserPool</span>
+              <span class="op">UpdateUserPool</span>
+              <span class="op">CreateUserPoolClient</span>
+              <span class="op">DescribeUserPoolClient</span>
+              <span class="op">ListUserPoolClients</span>
+              <span class="op">DeleteUserPoolClient</span>
               <span class="op">SignUp</span>
               <span class="op">ConfirmSignUp</span>
               <span class="op">InitiateAuth</span>
-              <span class="op">JWKS</span>
+              <span class="op">ForgotPassword</span>
+              <span class="op">ConfirmForgotPassword</span>
+              <span class="op">ChangePassword</span>
+              <span class="op">GlobalSignOut</span>
               <span class="op">AdminCreateUser</span>
               <span class="op">AdminDeleteUser</span>
               <span class="op">AdminGetUser</span>
-              <span class="op">CreateUserPoolClient</span>
-              <span class="op">DeleteUserPoolClient</span>
-              <span class="op">DescribeUserPoolClient</span>
-              <span class="op">ListUserPoolClients</span>
-              <span class="op">UpdateUserPool</span>
               <span class="op">ListUsers</span>
-              <span class="op-no">ForgotPassword</span>
-              <span class="op-no">ChangePassword</span>
-              <span class="op-no">GlobalSignOut</span>
+              <span class="op">JWKS</span>
             </div>
           </div>
-          <p class="service-note">Backed by SQLite. Supports JWT token generation (ID, access, refresh), user attributes, and password hashing.</p>
+          <p class="service-note">Backed by SQLite. Supports JWT token generation (ID, access, refresh), user attributes, password hashing, password reset flows, and multi-pool management.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -614,9 +644,16 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">Invoke</span>
               <span class="op">UpdateFunctionConfiguration</span>
               <span class="op">UpdateFunctionCode</span>
+              <span class="op">CreateEventSourceMapping</span>
+              <span class="op">GetEventSourceMapping</span>
+              <span class="op">DeleteEventSourceMapping</span>
+              <span class="op">ListEventSourceMappings</span>
+              <span class="op">AddPermission</span>
+              <span class="op">RemovePermission</span>
+              <span class="op">GetPolicy</span>
               <span class="op">TagResource</span>
               <span class="op">UntagResource</span>
-              <span class="op">ListEventSourceMappings</span>
+              <span class="op">ListTags</span>
             </div>
           </div>
           <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, and environment variable injection. In CDK mode, functions are discovered from the cloud assembly. In Terraform mode, functions are created dynamically via the management API.</p>
@@ -638,12 +675,33 @@ uvx --from local-web-services lws stepfunctions start-execution \
             <div class="service-detail-ops">
               <span class="op">CreateRestApi</span>
               <span class="op">GetRestApi</span>
+              <span class="op">ListRestApis</span>
+              <span class="op">UpdateRestApi</span>
               <span class="op">DeleteRestApi</span>
               <span class="op">CreateResource</span>
+              <span class="op">GetResources</span>
+              <span class="op">DeleteResource</span>
               <span class="op">PutMethod</span>
+              <span class="op">GetMethod</span>
+              <span class="op">DeleteMethod</span>
+              <span class="op">PutMethodResponse</span>
+              <span class="op">GetMethodResponse</span>
               <span class="op">PutIntegration</span>
+              <span class="op">GetIntegration</span>
+              <span class="op">DeleteIntegration</span>
+              <span class="op">PutIntegrationResponse</span>
+              <span class="op">GetIntegrationResponse</span>
+              <span class="op">TestInvokeMethod</span>
               <span class="op">CreateDeployment</span>
+              <span class="op">GetDeployment</span>
+              <span class="op">ListDeployments</span>
               <span class="op">CreateStage</span>
+              <span class="op">GetStage</span>
+              <span class="op">UpdateStage</span>
+              <span class="op">DeleteStage</span>
+              <span class="op">CreateAuthorizer</span>
+              <span class="op">GetAuthorizer</span>
+              <span class="op">ListAuthorizers</span>
             </div>
           </div>
           <div class="service-detail-section">
@@ -651,16 +709,28 @@ uvx --from local-web-services lws stepfunctions start-execution \
             <div class="service-detail-ops">
               <span class="op">CreateApi</span>
               <span class="op">GetApi</span>
+              <span class="op">ListApis</span>
+              <span class="op">UpdateApi</span>
               <span class="op">DeleteApi</span>
               <span class="op">CreateRoute</span>
-              <span class="op">CreateIntegration</span>
-              <span class="op">CreateStage</span>
+              <span class="op">GetRoute</span>
               <span class="op">ListRoutes</span>
+              <span class="op">DeleteRoute</span>
+              <span class="op">CreateIntegration</span>
+              <span class="op">GetIntegration</span>
               <span class="op">ListIntegrations</span>
+              <span class="op">DeleteIntegration</span>
+              <span class="op">CreateStage</span>
+              <span class="op">GetStage</span>
               <span class="op">ListStages</span>
+              <span class="op">UpdateStage</span>
+              <span class="op">DeleteStage</span>
+              <span class="op">CreateAuthorizer</span>
+              <span class="op">GetAuthorizer</span>
+              <span class="op">ListAuthorizers</span>
             </div>
           </div>
-          <p class="service-note">Supports both REST API (V1) and HTTP API (V2) with Lambda proxy integration. Routes requests to local Lambda functions with path parameters, query parameters, and request/response mapping. In Terraform mode, APIs and routes are created dynamically via the management API.</p>
+          <p class="service-note">Supports both REST API (V1) and HTTP API (V2) with Lambda proxy integration. Features include CORS handling, TOKEN and JWT authorizers, multi-value query parameters, multi-value headers, binary payload support (base64 encoding), path parameters, and request/response mapping. In Terraform mode, APIs and routes are created dynamically via the management API.</p>
         </div>
         <div class="service-detail">
           <div class="service-detail-header">
@@ -756,9 +826,141 @@ uvx --from local-web-services lws stepfunctions start-execution \
               <span class="op">TagResource</span>
               <span class="op">UntagResource</span>
               <span class="op">ListSecretVersionIds</span>
+              <span class="op">GetResourcePolicy</span>
             </div>
           </div>
-          <p class="service-note">In-memory secret store with version tracking (AWSCURRENT/AWSPREVIOUS staging labels), soft delete/restore, and tagging support. In CDK mode, secrets defined in the CloudFormation template are pre-seeded on startup.</p>
+          <p class="service-note">In-memory secret store with version tracking (AWSCURRENT/AWSPREVIOUS staging labels), soft delete/restore, resource policies, and tagging support. In CDK mode, secrets defined in the CloudFormation template are pre-seeded on startup.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>RDS</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+              <span class="op">CreateDBInstance</span>
+              <span class="op">DescribeDBInstances</span>
+              <span class="op">DeleteDBInstance</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports cluster and instance lifecycle operations with identifier-based filtering.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>DocumentDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports MongoDB-compatible cluster lifecycle operations.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>Neptune</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDBCluster</span>
+              <span class="op">DescribeDBClusters</span>
+              <span class="op">DeleteDBCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports graph database cluster lifecycle with Gremlin endpoint exposure.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>Elasticsearch</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateElasticsearchDomain</span>
+              <span class="op">DescribeElasticsearchDomains</span>
+              <span class="op">DeleteElasticsearchDomain</span>
+              <span class="op">ListElasticsearchDomainNames</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>OpenSearch</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateDomain</span>
+              <span class="op">DescribeDomains</span>
+              <span class="op">DeleteDomain</span>
+              <span class="op">ListDomainNames</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>ElastiCache</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateCacheCluster</span>
+              <span class="op">DescribeCacheClusters</span>
+              <span class="op">DeleteCacheCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports cache cluster lifecycle with status tracking.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>MemoryDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateCluster</span>
+              <span class="op">DescribeClusters</span>
+              <span class="op">DeleteCluster</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports Redis-compatible cluster lifecycle with status tracking.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>Glacier</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateVault</span>
+              <span class="op">ListVaults</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports idempotent vault creation and listing.</p>
+        </div>
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>S3 Tables</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>API Operations</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateTableBucket</span>
+              <span class="op">ListTableBuckets</span>
+              <span class="op">CreateTable</span>
+              <span class="op">ListTables</span>
+            </div>
+          </div>
+          <p class="service-note">Stub APIs for Terraform compatibility. Supports table buckets with namespace-based table organization.</p>
         </div>
       </div>
     </div>
