@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mock Servers - Local Web Services</title>
-  <meta name="description" content="Create mock HTTP, GraphQL, and gRPC servers for external API dependencies. Define routes, use template variables, and import from OpenAPI specs.">
+  <title>Mocking Services - Local Web Services</title>
+  <meta name="description" content="Mock AWS service operations and external API dependencies. Override AWS responses at the operation level, or create mock HTTP/GraphQL/gRPC servers for third-party APIs.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
       <ul class="nav-links">
         <li><a href="getting-started.html">Get Started</a></li>
         <li><a href="services.html">Cloud Emulation</a></li>
-        <li><a href="mocking.html" class="nav-active">Mocking External Services</a></li>
+        <li><a href="mocking.html" class="nav-active">Mocking Services</a></li>
         <li><a href="chaos.html">Chaos Engineering</a></li>
         <li><a href="cli.html">CLI</a></li>
         <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
@@ -25,15 +25,190 @@
 
   <header class="page-header">
     <div class="container">
-      <h1>Mock Servers</h1>
-      <p class="section-lead">Create local mock servers for external API dependencies &mdash; payment processors, third-party services, partner APIs &mdash; so your entire application runs locally without any external calls.</p>
+      <h1>Mocking Services</h1>
+      <p class="section-lead">Override AWS service responses at the operation level, or create mock servers for external API dependencies. Control exactly what your application sees &mdash; without changing your code.</p>
     </div>
   </header>
 
+  <!-- ============================================ -->
+  <!-- AWS SERVICE MOCKING                          -->
+  <!-- ============================================ -->
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>AWS Service Mocking</h2>
+      <p class="section-lead">Override individual AWS API operations with custom responses. Mocked operations bypass the real emulation entirely &mdash; your code gets back exactly what you define.</p>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">&#9881;</div>
+          <h3>Operation-Level Control</h3>
+          <p>Mock specific operations like <code>GetItem</code> or <code>ReceiveMessage</code> while leaving the rest of the service running normally.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9889;</div>
+          <h3>Service-Aware Helpers</h3>
+          <p>Built-in helpers auto-format responses for each service &mdash; DynamoDB JSON, S3 XML, SQS message structures &mdash; so you don't have to.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <h2>Why Mock External APIs?</h2>
-      <p class="section-lead">Your application doesn't exist in isolation. It calls Stripe for payments, Twilio for SMS, SendGrid for email, or internal microservices owned by other teams. Without mocks, you need live credentials, network access, and real API limits just to develop locally.</p>
+      <h3 class="section-subheading section-subheading--large" style="margin-top: 0;">How AWS Mocking Works</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Create a Mock</h3>
+            <p>Create a named mock targeting a specific AWS service.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws aws-mock create my-s3-mock --service s3</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Add Operation Rules</h3>
+            <p>Define what specific operations should return. Use service-aware helpers for correctly formatted responses.</p>
+            <div class="code-block"><code># Mock a DynamoDB GetItem with a helper
+uvx --from local-web-services lws aws-mock add-operation my-ddb-mock \
+  --operation get-item \
+  --item '{"id": "123", "name": "test"}'
+
+# Mock an S3 GetObject with string content
+uvx --from local-web-services lws aws-mock add-operation my-s3-mock \
+  --operation get-object \
+  --body-string "Hello from S3"
+
+# Mock with a raw response
+uvx --from local-web-services lws aws-mock add-operation my-mock \
+  --operation list-objects-v2 \
+  --status 200 \
+  --body-file /path/to/response.xml</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Requests Are Intercepted</h3>
+            <p>When your code calls a mocked operation, the mock middleware intercepts the request before it reaches the real provider and returns your custom response.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-subheading">Supported Services</h3>
+      <div class="service-index">
+        <span class="op">DynamoDB</span>
+        <span class="op">SQS</span>
+        <span class="op">S3</span>
+        <span class="op">SNS</span>
+        <span class="op">EventBridge</span>
+        <span class="op">Step Functions</span>
+        <span class="op">Cognito</span>
+        <span class="op">SSM</span>
+        <span class="op">Secrets Manager</span>
+        <span class="op">IAM</span>
+      </div>
+
+      <h3 class="section-subheading">Service-Aware Helpers</h3>
+      <p class="section-lead">Helpers automatically format responses in the correct service-specific format.</p>
+
+      <div class="services-list">
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>DynamoDB</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>Helper Options</h4>
+            <div class="service-detail-ops">
+              <span class="op">--item</span>
+              <span class="op">get-item</span>
+              <span class="op">query</span>
+              <span class="op">scan</span>
+            </div>
+          </div>
+          <p class="service-note">Converts simple JSON to DynamoDB JSON format with type descriptors automatically. <code>--item '{"id": "123", "age": 30}'</code> becomes <code>{"id": {"S": "123"}, "age": {"N": "30"}}</code>.</p>
+        </div>
+
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>S3</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>Helper Options</h4>
+            <div class="service-detail-ops">
+              <span class="op">--body-string</span>
+              <span class="op">--body-file</span>
+              <span class="op">get-object</span>
+              <span class="op">list-objects-v2</span>
+              <span class="op">head-object</span>
+            </div>
+          </div>
+          <p class="service-note">Returns file content with proper headers (Content-Type, Content-Length, ETag). List operations generate correct S3 XML listings.</p>
+        </div>
+
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>SQS, SSM, Secrets Manager, Cognito, SNS, Step Functions, EventBridge</h3>
+          </div>
+          <p class="service-note">Each service has helpers that format responses in the correct structure: SQS XML messages with auto-generated IDs, SSM parameter metadata, Cognito JWT tokens, SNS message IDs, Step Functions execution ARNs, and EventBridge entry responses.</p>
+        </div>
+      </div>
+
+      <h3 class="section-subheading">Conditional Matching</h3>
+      <p class="section-lead">Match requests by headers to return different responses for different inputs.</p>
+      <div class="config-example">
+        <div class="code-block"><code>uvx --from local-web-services lws aws-mock add-operation my-s3-mock \
+  --operation get-object \
+  --match-header "x-custom-header=specific-value" \
+  --status 200 \
+  --body-string "Custom response for matched header"</code></div>
+      </div>
+
+      <h3 class="section-subheading">YAML Configuration</h3>
+      <p class="section-lead">AWS mocks are stored in <code>.lws/mocks/&lt;name&gt;/</code> and loaded automatically on startup.</p>
+      <div class="config-example">
+        <div class="code-block"><code># .lws/mocks/my-s3-mock/config.yaml
+name: my-s3-mock
+service: s3
+enabled: true</code></div>
+      </div>
+      <div class="config-example">
+        <div class="code-block"><code># .lws/mocks/my-s3-mock/operations/get-object.yaml
+operations:
+  - operation: get-object
+    match:
+      headers:
+        x-custom-header: "specific-value"
+    response:
+      status: 200
+      body: "file content"
+      content_type: "text/plain"
+      delay_ms: 100</code></div>
+      </div>
+
+      <h3 class="section-subheading">Runtime Control</h3>
+      <p class="section-lead">Enable and disable AWS mocks at runtime without restarting <code>ldk dev</code>.</p>
+      <div class="config-example">
+        <div class="code-block"><code># Enable/disable mocks for a service
+uvx --from local-web-services lws aws-mock enable s3
+uvx --from local-web-services lws aws-mock disable s3
+
+# Check mock status
+uvx --from local-web-services lws aws-mock status</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXTERNAL SERVICE MOCKING                     -->
+  <!-- ============================================ -->
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>External Service Mocking</h2>
+      <p class="section-lead">Create local mock servers for external API dependencies &mdash; payment processors, third-party services, partner APIs &mdash; so your entire application runs locally without any external calls.</p>
 
       <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
         <div class="feature-card">
@@ -50,10 +225,9 @@
     </div>
   </section>
 
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
-      <h2>How It Works</h2>
-      <p class="section-lead">Mock servers integrate directly into your local development environment alongside AWS service emulations.</p>
+      <h3 class="section-subheading section-subheading--large" style="margin-top: 0;">How External Mocking Works</h3>
 
       <div class="steps">
         <div class="step">
@@ -94,7 +268,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-alt">
     <div class="container">
       <h2>Protocol Support</h2>
       <p class="section-lead">Mock servers support the protocols your external dependencies use.</p>
@@ -119,7 +293,7 @@
     </div>
   </section>
 
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
       <h2>Defining Routes</h2>
       <p class="section-lead">Routes define how your mock server responds to incoming requests. Configure them via CLI or YAML.</p>
@@ -176,7 +350,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-alt">
     <div class="container">
       <h2>Template Variables</h2>
       <p class="section-lead">Use template variables in response bodies to generate dynamic, realistic responses.</p>
@@ -226,7 +400,7 @@
     </div>
   </section>
 
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
       <h2>OpenAPI Import</h2>
       <p class="section-lead">Automatically generate mock routes from existing OpenAPI 3.x or Swagger 2.x specifications.</p>

@@ -15,7 +15,7 @@
       <ul class="nav-links">
         <li><a href="getting-started.html">Get Started</a></li>
         <li><a href="services.html">Cloud Emulation</a></li>
-        <li><a href="mocking.html">Mocking External Services</a></li>
+        <li><a href="mocking.html">Mocking Services</a></li>
         <li><a href="chaos.html">Chaos Engineering</a></li>
         <li><a href="cli.html" class="nav-active">CLI</a></li>
         <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
@@ -266,6 +266,61 @@ uvx --from local-web-services lws mock import-spec \
 uvx --from local-web-services lws mock chaos \
   --name stripe-api \
   --error-rate 0.1</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws aws-mock</h4>
+          <p>AWS operation mocking. Override individual AWS API operations with custom responses.</p>
+          <div>
+            <span class="subcmd">create</span>
+            <span class="subcmd">delete</span>
+            <span class="subcmd">list</span>
+            <span class="subcmd">status</span>
+            <span class="subcmd">add-operation</span>
+            <span class="subcmd">remove-operation</span>
+            <span class="subcmd">enable</span>
+            <span class="subcmd">disable</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code># Create an AWS mock for S3
+uvx --from local-web-services lws aws-mock create my-s3-mock --service s3
+
+# Mock a DynamoDB GetItem with a helper
+uvx --from local-web-services lws aws-mock add-operation my-ddb-mock \
+  --operation get-item \
+  --item '{"id": "123", "name": "test"}'
+
+# Mock an S3 GetObject
+uvx --from local-web-services lws aws-mock add-operation my-s3-mock \
+  --operation get-object \
+  --body-string "Hello from S3"
+
+# Enable/disable at runtime
+uvx --from local-web-services lws aws-mock enable s3
+uvx --from local-web-services lws aws-mock disable s3</code></div>
+        </div>
+
+        <div class="lws-command">
+          <h4>lws chaos</h4>
+          <p>Chaos engineering for AWS services. Inject errors, latency, timeouts, and connection resets into local service emulations.</p>
+          <div>
+            <span class="subcmd">enable</span>
+            <span class="subcmd">disable</span>
+            <span class="subcmd">set</span>
+            <span class="subcmd">status</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code># Enable chaos on DynamoDB
+uvx --from local-web-services lws chaos enable dynamodb
+
+# Set error rate and latency
+uvx --from local-web-services lws chaos set dynamodb \
+  --error-rate 0.1 \
+  --latency-min 50 --latency-max 200
+
+# Check status
+uvx --from local-web-services lws chaos status
+
+# Disable
+uvx --from local-web-services lws chaos disable dynamodb</code></div>
         </div>
       </div>
     </div>

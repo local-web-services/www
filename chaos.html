@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chaos Engineering - Local Web Services</title>
-  <meta name="description" content="Test failure handling before production with configurable error rates, latency injection, timeouts, and connection resets.">
+  <meta name="description" content="Inject failures into AWS service emulations and external mock servers. Test error rates, latency, timeouts, and connection resets before production.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
       <ul class="nav-links">
         <li><a href="getting-started.html">Get Started</a></li>
         <li><a href="services.html">Cloud Emulation</a></li>
-        <li><a href="mocking.html">Mocking External Services</a></li>
+        <li><a href="mocking.html">Mocking Services</a></li>
         <li><a href="chaos.html" class="nav-active">Chaos Engineering</a></li>
         <li><a href="cli.html">CLI</a></li>
         <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
@@ -26,20 +26,20 @@
   <header class="page-header">
     <div class="container">
       <h1>Chaos Engineering</h1>
-      <p class="section-lead">Test how your application handles failures before they happen in production. Inject errors, latency, timeouts, and connection resets into your mock servers to verify resilience.</p>
+      <p class="section-lead">Test how your application handles failures before they happen in production. Inject errors, latency, timeouts, and connection resets into both AWS services and external mock servers.</p>
     </div>
   </header>
 
   <section class="section">
     <div class="container">
       <h2>Why Test Failure Handling?</h2>
-      <p class="section-lead">External APIs fail. Networks drop. Services slow down. If you only test the happy path, you'll discover your error handling is broken when it matters most &mdash; in production, at 2 AM, during a traffic spike.</p>
+      <p class="section-lead">Services fail. Networks drop. APIs slow down. If you only test the happy path, you'll discover your error handling is broken when it matters most &mdash; in production, at 2 AM, during a traffic spike.</p>
 
       <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
         <div class="feature-card">
           <div class="feature-icon">!</div>
           <h3>Failures Are Inevitable</h3>
-          <p>Every external dependency will fail eventually. The question isn't whether, but how your application handles it when it does.</p>
+          <p>Every dependency will fail eventually. The question isn't whether, but how your application handles it when it does.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&check;</div>
@@ -50,31 +50,35 @@
     </div>
   </section>
 
+  <!-- ============================================ -->
+  <!-- AWS SERVICE CHAOS                            -->
+  <!-- ============================================ -->
+
   <section class="section section-alt">
     <div class="container">
-      <h2>Failure Modes</h2>
-      <p class="section-lead">Four configurable failure modes simulate real-world failure scenarios.</p>
+      <h2>AWS Service Chaos</h2>
+      <p class="section-lead">Inject failures directly into your local AWS service emulations. Test how your application handles DynamoDB throttling, S3 access errors, SQS timeouts, and more &mdash; with realistic, service-aware error responses.</p>
 
       <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
         <div class="feature-card">
           <div class="feature-icon">500</div>
-          <h3>Error Rate</h3>
-          <p>A configurable percentage of requests return HTTP 500 or 503 errors instead of the normal response. Supports weighted status codes so you can simulate specific error distributions.</p>
+          <h3>Error Injection</h3>
+          <p>A configurable percentage of requests return realistic AWS errors with correct status codes and error formats. Supports weighted error selection from multiple error types.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#8987;</div>
           <h3>Latency Injection</h3>
-          <p>Add random delay to responses between a minimum and maximum duration (in milliseconds). Simulates slow network conditions and overloaded services.</p>
+          <p>Add random delay between a minimum and maximum duration (in milliseconds). Simulates slow network conditions and overloaded services.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#8734;</div>
           <h3>Timeout Simulation</h3>
-          <p>A configurable percentage of requests hang indefinitely, never returning a response. Tests whether your application's timeout settings and cancellation logic work correctly.</p>
+          <p>A configurable percentage of requests hang indefinitely, never returning a response. Tests your application's timeout settings and cancellation logic.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#9249;</div>
           <h3>Connection Reset</h3>
-          <p>A configurable percentage of requests have the TCP connection dropped mid-request. Simulates network failures, load balancer issues, and infrastructure problems.</p>
+          <p>A configurable percentage of requests have the TCP connection dropped mid-request. Simulates network failures and infrastructure problems.</p>
         </div>
       </div>
     </div>
@@ -82,8 +86,146 @@
 
   <section class="section">
     <div class="container">
-      <h2>Configuration</h2>
-      <p class="section-lead">Configure chaos settings via YAML or CLI commands.</p>
+      <h3 class="section-subheading section-subheading--large" style="margin-top: 0;">Supported AWS Services</h3>
+      <div class="service-index">
+        <span class="op">DynamoDB</span>
+        <span class="op">SQS</span>
+        <span class="op">S3</span>
+        <span class="op">SNS</span>
+        <span class="op">EventBridge</span>
+        <span class="op">Step Functions</span>
+        <span class="op">Cognito</span>
+        <span class="op">SSM</span>
+        <span class="op">Secrets Manager</span>
+        <span class="op">IAM</span>
+      </div>
+
+      <h3 class="section-subheading">Service-Aware Error Responses</h3>
+      <p class="section-lead">Injected errors use the correct format for each service &mdash; JSON for DynamoDB and Cognito, XML for S3 and IAM &mdash; so your application's error handling is tested against realistic responses.</p>
+
+      <div class="services-list">
+        <div class="service-detail">
+          <div class="service-detail-header">
+            <h3>Built-in Error Types</h3>
+          </div>
+          <div class="service-detail-section">
+            <h4>Generic AWS Errors</h4>
+            <div class="service-detail-ops">
+              <span class="op">InternalServerError (500)</span>
+              <span class="op">ServiceUnavailableException (503)</span>
+              <span class="op">ThrottlingException (429)</span>
+              <span class="op">AccessDeniedException (403)</span>
+              <span class="op">ResourceNotFoundException (404)</span>
+              <span class="op">ValidationException (400)</span>
+            </div>
+          </div>
+          <div class="service-detail-section">
+            <h4>Service-Specific Errors</h4>
+            <div class="service-detail-ops">
+              <span class="op">ConditionalCheckFailedException</span>
+              <span class="op">ProvisionedThroughputExceededException</span>
+              <span class="op">NoSuchKey</span>
+              <span class="op">NoSuchBucket</span>
+              <span class="op">UserNotFoundException</span>
+              <span class="op">NotAuthorizedException</span>
+            </div>
+          </div>
+          <p class="service-note">Errors are weighted &mdash; configure multiple error types with different probabilities to simulate realistic failure distributions.</p>
+        </div>
+      </div>
+
+      <h3 class="section-subheading">CLI Commands</h3>
+      <div class="config-example">
+        <div class="code-block"><code># Enable chaos on a service
+uvx --from local-web-services lws chaos enable dynamodb
+
+# Set chaos parameters
+uvx --from local-web-services lws chaos set dynamodb \
+  --error-rate 0.1 \
+  --latency-min 50 \
+  --latency-max 200
+
+# Set timeout and connection reset rates
+uvx --from local-web-services lws chaos set s3 \
+  --timeout-rate 0.05 \
+  --connection-reset-rate 0.02
+
+# Check status for all services
+uvx --from local-web-services lws chaos status
+
+# Disable chaos on a service
+uvx --from local-web-services lws chaos disable dynamodb</code></div>
+      </div>
+
+      <h3 class="section-subheading">Runtime Toggling</h3>
+      <p class="section-lead">Enable, disable, and adjust chaos on running services without restarting <code>ldk dev</code>.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Start Normal</h3>
+            <p>Run your application with AWS services in normal mode. Verify the happy path works.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Enable Chaos</h3>
+            <p>Turn on failure injection for specific AWS services while the application is running.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws chaos enable dynamodb
+uvx --from local-web-services lws chaos set dynamodb --error-rate 0.3</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Observe and Fix</h3>
+            <p>Watch how your application reacts. Check retry behavior, error messages, and fallback logic. Disable and fix issues.</p>
+            <div class="code-block"><code>uvx --from local-web-services lws chaos disable dynamodb</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- EXTERNAL SERVICE CHAOS                       -->
+  <!-- ============================================ -->
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>External Service Chaos</h2>
+      <p class="section-lead">Inject failures into your external mock servers. Test how your application handles third-party API outages, slow responses, and network failures.</p>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">500</div>
+          <h3>Error Rate</h3>
+          <p>A configurable percentage of requests return HTTP 500 or 503 errors instead of the normal response. Supports weighted status codes for specific error distributions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#8987;</div>
+          <h3>Latency Injection</h3>
+          <p>Add random delay to responses between a minimum and maximum duration. Simulates slow network conditions and overloaded external APIs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#8734;</div>
+          <h3>Timeout Simulation</h3>
+          <p>A configurable percentage of requests hang indefinitely. Tests whether your timeout settings and cancellation logic work correctly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9249;</div>
+          <h3>Connection Reset</h3>
+          <p>A configurable percentage of requests have the TCP connection dropped mid-request. Simulates network failures and load balancer issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h3 class="section-subheading section-subheading--large" style="margin-top: 0;">Configuration</h3>
 
       <h3 class="section-subheading">YAML Configuration</h3>
       <div class="config-example">
@@ -131,50 +273,14 @@ uvx --from local-web-services lws mock chaos \
     </div>
   </section>
 
+  <!-- ============================================ -->
+  <!-- USE CASES                                    -->
+  <!-- ============================================ -->
+
   <section class="section section-alt">
     <div class="container">
-      <h2>Runtime Toggling</h2>
-      <p class="section-lead">Enable or disable chaos on running mock servers without restarting <code>ldk dev</code>. Adjust failure rates on the fly to test different scenarios.</p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Start Normal</h3>
-            <p>Run your application with mock servers in normal mode. Verify the happy path works.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Enable Chaos</h3>
-            <p>Turn on failure injection while the application is running. No restart needed.</p>
-            <div class="code-block"><code>uvx --from local-web-services lws mock chaos --name stripe-api --error-rate 0.5</code></div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Observe Behavior</h3>
-            <p>Watch how your application reacts to failures. Check logs, retry behavior, and user-facing error messages.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Disable and Fix</h3>
-            <p>Turn chaos off, fix any issues, and repeat.</p>
-            <div class="code-block"><code>uvx --from local-web-services lws mock chaos --name stripe-api --disable</code></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
       <h2>Use Cases</h2>
-      <p class="section-lead">Common resilience patterns you can validate with chaos testing.</p>
+      <p class="section-lead">Common resilience patterns you can validate with chaos testing &mdash; for both AWS services and external dependencies.</p>
 
       <div class="goals-grid">
         <div class="goal-card">
@@ -199,7 +305,7 @@ uvx --from local-web-services lws mock chaos \
         </div>
         <div class="goal-card">
           <h3>Error Reporting</h3>
-          <p>Confirm that errors from external services are properly logged, reported to monitoring tools, and surfaced to users with helpful messages.</p>
+          <p>Confirm that errors from services are properly logged, reported to monitoring tools, and surfaced to users with helpful messages.</p>
         </div>
       </div>
     </div>
