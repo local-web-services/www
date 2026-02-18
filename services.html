@@ -336,8 +336,9 @@
             <h4>CDK Constructs</h4>
             <div class="service-detail-ops">
               <span class="cdk">aws_lambda.Function</span>
+              <span class="cdk">aws_lambda.FunctionUrl</span>
             </div>
-            <p class="cdk-props"><code>handler</code>, <code>runtime</code>, <code>code</code>, <code>timeout</code>, <code>memorySize</code>, <code>environment</code></p>
+            <p class="cdk-props"><code>handler</code>, <code>runtime</code>, <code>code</code>, <code>timeout</code>, <code>memorySize</code>, <code>environment</code>, <code>authType</code>, <code>cors</code>, <code>invokeMode</code></p>
           </div>
           <div class="service-detail-section">
             <h4>Management API (Terraform mode)</h4>
@@ -361,7 +362,16 @@
               <span class="op">ListTags</span>
             </div>
           </div>
-          <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, and environment variable injection. In CDK mode, functions are discovered from the cloud assembly. In Terraform mode, functions are created dynamically via the management API.</p>
+          <div class="service-detail-section">
+            <h4>Function URLs</h4>
+            <div class="service-detail-ops">
+              <span class="op">CreateFunctionUrlConfig</span>
+              <span class="op">GetFunctionUrlConfig</span>
+              <span class="op">UpdateFunctionUrlConfig</span>
+              <span class="op">DeleteFunctionUrlConfig</span>
+            </div>
+          </div>
+          <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, environment variable injection, and <strong>Function URLs</strong> &mdash; each function URL gets its own HTTP endpoint on a dedicated port with full CORS support and AWS Lambda payload format 2.0. Supports both BUFFERED and RESPONSE_STREAM invoke modes. In CDK mode, functions and URLs are discovered from the cloud assembly. In Terraform mode, functions are created dynamically via the management API.</p>
         </div>
 
         <div class="service-detail" id="apigateway">

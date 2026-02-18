@@ -45,6 +45,16 @@
           <li><code>--log-level, -l</code> <span>Log level: debug, info, warning, error (default: info)</span></li>
           <li><code>--project-dir, -d</code> <span>Project root directory (default: current directory)</span></li>
           <li><code>--mode, -m</code> <span>Project mode: cdk or terraform (default: auto-detect from project files)</span></li>
+          <li><code>--background, -b</code> <span>Run in the background as a detached process. Logs are written to <code>.lws/ldk-dev.log</code>. Stop with <code>ldk stop</code>.</span></li>
+        </ul>
+      </div>
+
+      <div class="cli-detail">
+        <div class="code-block"><code>uvx --from local-web-services ldk stop [OPTIONS]</code></div>
+        <h3>ldk stop</h3>
+        <p>Stop a background <code>ldk dev</code> session. Sends a graceful shutdown signal via the management API.</p>
+        <ul class="option-list">
+          <li><code>--port, -p</code> <span>Port of the running ldk dev instance to stop (default: 3000)</span></li>
         </ul>
       </div>
 
@@ -95,6 +105,15 @@ uvx --from local-web-services ldk setup lambda --runtime python3.12</code></div>
       <p class="section-lead">AWS CLI-style commands for interacting with your local services. Requires a running <code>ldk dev</code> instance.</p>
 
       <div class="lws-command-grid">
+        <div class="lws-command">
+          <h4>lws init</h4>
+          <p>Initialize Claude Code integration. Creates CLAUDE.md context and slash commands for AI-assisted mock and chaos workflows.</p>
+          <div>
+            <span class="subcmd">--project-dir</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code>uvx --from local-web-services lws init</code></div>
+        </div>
+
         <div class="lws-command">
           <h4>lws status</h4>
           <p>Show the status of the running ldk dev instance and all providers.</p>

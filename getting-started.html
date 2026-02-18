@@ -167,6 +167,52 @@ uvx --from local-web-services lws stepfunctions start-execution \
     </div>
   </section>
 
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Claude Code Integration</h2>
+      <p class="section-lead">Set up slash commands and context for AI code editors so Claude can manage your local AWS mocks and chaos testing.</p>
+
+      <div class="getting-started-steps">
+        <div class="gs-step">
+          <h3>Initialize</h3>
+          <div class="code-block"><code>uvx --from local-web-services lws init</code></div>
+          <p>This creates three files in your project:</p>
+          <ul>
+            <li><code>CLAUDE.md</code> &mdash; LWS quick reference and CLI commands that Claude reads automatically</li>
+            <li><code>.claude/commands/lws/mock.md</code> &mdash; The <code>/lws:mock</code> slash command</li>
+            <li><code>.claude/commands/lws/chaos.md</code> &mdash; The <code>/lws:chaos</code> slash command</li>
+          </ul>
+          <p>The command is idempotent &mdash; running it again updates existing files without duplicating content.</p>
+        </div>
+
+        <div class="gs-step">
+          <h3>Slash Commands</h3>
+          <p>Once initialized, two slash commands are available in Claude Code:</p>
+        </div>
+      </div>
+
+      <div class="feature-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto;">
+        <div class="feature-card">
+          <div class="feature-icon">/</div>
+          <h3>/lws:mock</h3>
+          <p>Guides Claude through creating and configuring AWS operation mocks. Supports file-based mocks (persist across restarts) and runtime mocks (configured on the fly). Includes service-aware helpers for DynamoDB JSON, S3 XML, SQS messages, and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">/</div>
+          <h3>/lws:chaos</h3>
+          <p>Guides Claude through enabling chaos engineering on AWS services. Configure error rates, latency injection, timeouts, and connection resets. Includes common scenarios for testing retry logic, circuit breakers, and timeout handling.</p>
+        </div>
+      </div>
+
+      <div class="getting-started-steps" style="margin-top: 48px;">
+        <div class="gs-step">
+          <h3>What Gets Added to CLAUDE.md</h3>
+          <p>The <code>CLAUDE.md</code> snippet gives Claude context about your LWS environment, including how to start the dev server, check status, and use mock and chaos commands. This context is read automatically by Claude Code when working in your project.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="container">
       <div class="footer-inner">
