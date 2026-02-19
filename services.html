@@ -537,7 +537,7 @@
         </div>
       </div>
 
-      <h3 class="service-category">Identity</h3>
+      <h3 class="service-category">Identity &amp; Authorization</h3>
 
       <div class="services-list">
         <div class="service-detail" id="iam-sts">
@@ -564,7 +564,15 @@
               <span class="op">AssumeRole</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs that return AWS-compatible responses for Terraform compatibility. IAM role and policy operations are accepted and stored in memory. STS returns dummy credentials and caller identity. These stubs allow <code>terraform apply</code> to succeed without a real AWS account.</p>
+          <div class="service-detail-section">
+            <h4>IAM Authorization Modes</h4>
+            <div class="service-detail-ops">
+              <span class="op">Disabled</span>
+              <span class="op">Audit</span>
+              <span class="op">Enforce</span>
+            </div>
+          </div>
+          <p class="service-note">IAM role and policy operations are accepted and stored in memory. STS returns credentials and caller identity for Terraform compatibility. <strong>IAM authorization</strong> can be configured in three modes: <strong>disabled</strong> (default &mdash; all requests pass through), <strong>audit</strong> (requests pass through but violations are logged as warnings), or <strong>enforce</strong> (requests that fail IAM checks are denied with HTTP 403). Supports identity-based policies, permissions boundaries, resource policies, wildcard matching, and per-request identity override via HTTP header. Authorization applies to DynamoDB, S3, SQS, SNS, EventBridge, Step Functions, Cognito, SSM, and Secrets Manager.</p>
         </div>
       </div>
 

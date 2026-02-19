@@ -344,6 +344,32 @@ uvx --from local-web-services lws chaos status
 # Disable
 uvx --from local-web-services lws chaos disable dynamodb</code></div>
         </div>
+
+        <div class="lws-command">
+          <h4>lws iam-auth</h4>
+          <p>IAM authorization management. Audit, ignore, or enforce IAM permissions on local AWS services.</p>
+          <div>
+            <span class="subcmd">status</span>
+            <span class="subcmd">enable</span>
+            <span class="subcmd">disable</span>
+            <span class="subcmd">set</span>
+            <span class="subcmd">set-identity</span>
+          </div>
+          <div class="code-block" style="margin-top: 12px;"><code># Check IAM auth status
+uvx --from local-web-services lws iam-auth status
+
+# Enforce IAM on DynamoDB (deny unauthorized requests)
+uvx --from local-web-services lws iam-auth set dynamodb --mode enforce
+
+# Audit mode (log violations without blocking)
+uvx --from local-web-services lws iam-auth set s3 --mode audit
+
+# Switch active identity
+uvx --from local-web-services lws iam-auth set-identity readonly-user
+
+# Disable IAM auth for a service
+uvx --from local-web-services lws iam-auth disable sqs</code></div>
+        </div>
       </div>
     </div>
   </section>
