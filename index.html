@@ -6,6 +6,7 @@
   <title>Local Web Services - The Fastest Feedback Loop for Cloud-Native Development</title>
   <meta name="description" content="Local Web Services reads your AWS CDK or Terraform project and recreates your application locally. Build, test, and debug cloud-native AWS apps without deploying — no credentials, no cost, no waiting.">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
 
@@ -14,6 +15,7 @@
       <a href="index.html" class="nav-logo">Local Web Services</a>
       <ul class="nav-links">
         <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="sdks.html">SDKs</a></li>
         <li><a href="services.html">Cloud Emulation</a></li>
         <li><a href="mocking.html">Mocking Services</a></li>
         <li><a href="chaos.html">Chaos Engineering</a></li>
@@ -26,15 +28,15 @@
   <header class="hero">
     <div class="container">
       <h1>Local Web Services</h1>
-      <p class="hero-subtitle">Run your AWS CDK and Terraform applications locally with ldk dev.<br>
-Interact with local services using lws.<br>
+      <p class="hero-subtitle">Test AWS applications with realistic in-process local services using native language SDKs.<br>
+Or run <code>ldk dev</code> as a local development server for CDK and Terraform projects.<br>
 No credentials. No cost. No waiting.</p>
       <div class="hero-actions">
-        <a href="getting-started.html" class="btn btn-primary">Get Started</a>
+        <a href="sdks.html" class="btn btn-primary">Explore the SDKs</a>
         <a href="https://github.com/local-web-services/local-web-services" class="btn btn-secondary">View on GitHub</a>
       </div>
       <div class="hero-install">
-        <code>uvx --from local-web-services ldk dev</code>
+        <code>pip install local-web-services-python-sdk</code>
       </div>
     </div>
   </header>
@@ -42,13 +44,18 @@ No credentials. No cost. No waiting.</p>
   <section class="section" id="what">
     <div class="container">
       <h2>What is Local Web Services?</h2>
-      <p class="section-lead">Local Web Services is an open-source tool that reads your AWS CDK or Terraform project and recreates your entire application locally. It supports both CDK (via <code>cdk synth</code>) and Terraform (via <code>terraform apply</code>) with automatic project type detection. Two complementary CLI tools work together: <code>ldk</code> runs your infrastructure, and <code>lws</code> lets you interact with it.</p>
+      <p class="section-lead">Local Web Services emulates AWS services locally for development and testing. Use the language SDKs for in-process pytest or unit testing, or run <code>ldk dev</code> to start a full local development server that reads your CDK or Terraform project and recreates your entire stack.</p>
 
-      <div class="feature-grid feature-grid--2col">
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" width="40" height="40" style="vertical-align: middle;"></div>
+          <h3>Python SDK</h3>
+          <p>In-process AWS service testing for pytest. Start DynamoDB, SQS, S3 and more in background threads — no external process, no ports. Fluent APIs for mocking, chaos, and IAM.</p>
+        </div>
         <div class="feature-card">
           <div class="feature-icon">&#9889;</div>
           <h3>ldk</h3>
-          <p>The development server. Parses your CDK or Terraform project and spins up local providers for every AWS service you use — DynamoDB, Lambda, S3, SQS, and more. Your entire stack runs locally.</p>
+          <p>The local development server. Parses your CDK or Terraform project and spins up local providers for every AWS service you use — DynamoDB, Lambda, S3, SQS, and more. Hot reloading included.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128295;</div>
@@ -235,24 +242,32 @@ No credentials. No cost. No waiting.</p>
 
   <section class="section section-alt">
     <div class="container">
-      <h2>Explore the Docs</h2>
-      <p class="section-lead">Follow the developer journey: install, set up services, mock external dependencies, and test failure handling.</p>
+      <h2>Build with Local Web Services</h2>
+      <p class="section-lead">From in-process SDK testing to full local development servers — choose your path.</p>
 
-      <div class="journey-grid">
+      <div class="journey-grid journey-grid--5">
+        <a href="sdks.html" class="feature-card" style="text-decoration: none;">
+          <div class="feature-icon" style="display:flex;gap:6px;justify-content:center;align-items:center;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" width="32" height="32">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" width="32" height="32">
+          </div>
+          <h3>SDKs</h3>
+          <p>In-process testing with native language SDKs. Python and TypeScript available now.</p>
+        </a>
         <a href="getting-started.html" class="feature-card" style="text-decoration: none;">
           <div class="feature-icon">&#128640;</div>
           <h3>Get Started</h3>
-          <p>Install prerequisites, clone a sample project, run your first local stack, and set up Claude Code integration.</p>
+          <p>Install prerequisites, run your first local stack, and set up Claude Code integration.</p>
         </a>
         <a href="services.html" class="feature-card" style="text-decoration: none;">
           <div class="feature-icon">&#9729;&#65039;</div>
           <h3>Cloud Emulation</h3>
-          <p>Browse all 25 supported AWS service emulations with full operation lists and CDK construct mappings.</p>
+          <p>25 supported AWS service emulations with full operation lists and CDK construct mappings.</p>
         </a>
         <a href="mocking.html" class="feature-card" style="text-decoration: none;">
           <div class="feature-icon">&#127917;</div>
           <h3>Mock Servers</h3>
-          <p>Create mock HTTP, GraphQL, and gRPC servers for external APIs with template variables and OpenAPI import.</p>
+          <p>Mock AWS operations and external APIs with HTTP, GraphQL, and gRPC mock servers.</p>
         </a>
         <a href="chaos.html" class="feature-card" style="text-decoration: none;">
           <div class="feature-icon">&#128165;</div>
@@ -281,5 +296,12 @@ No credentials. No cost. No waiting.</p>
     </div>
   </footer>
 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="lws.js"></script>
 </body>
 </html>

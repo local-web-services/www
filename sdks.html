@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDKs - Local Web Services</title>
+  <meta name="description" content="Test AWS applications with realistic in-process local services using native language SDKs. Python available now, with TypeScript, JavaScript, Java, and Go coming soon.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="sdks.html" class="nav-active">SDKs</a></li>
+        <li><a href="services.html">Cloud Emulation</a></li>
+        <li><a href="mocking.html">Mocking Services</a></li>
+        <li><a href="chaos.html">Chaos Engineering</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>SDKs</h1>
+      <p class="section-lead">Test your AWS applications with realistic in-process local services using a native language SDK. No external process, no ports, no Docker required — services run as threads inside your test suite.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="lang-grid">
+        <a href="sdk-python.html" class="lang-card lang-card--active">
+          <div class="lang-card-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" width="48" height="48"></div>
+          <div class="lang-badge lang-badge--available">Available</div>
+          <h3>Python</h3>
+          <p>pytest integration, DynamoDB / SQS / S3 helpers, fluent mocking and chaos APIs</p>
+        </a>
+        <a href="sdk-typescript.html" class="lang-card lang-card--active">
+          <div class="lang-card-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" width="48" height="48"></div>
+          <div class="lang-badge lang-badge--available">Available</div>
+          <h3>TypeScript</h3>
+          <p>Jest / Vitest integration, AWS SDK v3 clients, mocking and chaos APIs</p>
+        </a>
+        <div class="lang-card lang-card--coming-soon">
+          <div class="lang-card-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" width="48" height="48"></div>
+          <div class="lang-badge lang-badge--coming-soon">Coming Soon</div>
+          <h3>JavaScript</h3>
+          <p>Jest / Mocha integration for Node.js projects</p>
+        </div>
+        <div class="lang-card lang-card--coming-soon">
+          <div class="lang-card-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" width="48" height="48"></div>
+          <div class="lang-badge lang-badge--coming-soon">Coming Soon</div>
+          <h3>Java</h3>
+          <p>JUnit 5 integration for Java and Kotlin projects</p>
+        </div>
+        <div class="lang-card lang-card--coming-soon">
+          <div class="lang-card-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original-wordmark.svg" alt="Go" width="48" height="48"></div>
+          <div class="lang-badge lang-badge--coming-soon">Coming Soon</div>
+          <h3>Go</h3>
+          <p>Testing package integration for Go applications</p>
+        </div>
+      </div>
+
+      <h3 class="section-subheading section-subheading--primary">Why use an SDK?</h3>
+
+      <div class="comparison">
+        <div class="comparison-col comparison-before">
+          <h3>ldk dev (local server)</h3>
+          <ul>
+            <li>Runs as an external process</li>
+            <li>Services start on network ports (3000–3030)</li>
+            <li>Works with any language or framework</li>
+            <li>Supports hot reloading for Lambda handlers</li>
+            <li>Web dashboard at <code>/_ldk/gui</code></li>
+            <li>Reads CDK or Terraform projects</li>
+          </ul>
+        </div>
+        <div class="comparison-col comparison-after">
+          <h3>Language SDK (in-process)</h3>
+          <ul>
+            <li>Runs as threads in your test process</li>
+            <li>No ports, no networking overhead</li>
+            <li>Native test framework integration (pytest, Jest…)</li>
+            <li>Per-test state isolation with <code>session.reset()</code></li>
+            <li>Fluent APIs for mocking and chaos injection</li>
+            <li>Auto-discovers resources from CDK or HCL</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="section-subheading">Python SDK Highlights</h3>
+      <p class="section-lead" style="margin-top: -32px;">The Python SDK (<code>local-web-services-python-sdk</code>) provides everything you need to test AWS-backed Python applications without leaving your pytest suite.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128260;</div>
+          <h3>LwsSession</h3>
+          <p>A single context manager that starts all your services. Declare tables, queues, buckets, topics, state machines, parameters, and secrets — or auto-discover them from a CDK or Terraform project.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128101;</div>
+          <h3>pytest Fixtures</h3>
+          <p>Zero-boilerplate pytest integration. The <code>lws_session</code> fixture starts services once per session; <code>lws_reset</code> wipes state between tests automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128203;</div>
+          <h3>Resource Helpers</h3>
+          <p>Simplified DynamoDB, SQS, and S3 helpers with built-in assertion methods: <code>table.assert_item_exists()</code>, <code>queue.assert_message_count()</code>, <code>bucket.assert_object_count()</code>.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127917;</div>
+          <h3>Operation Mocking</h3>
+          <p>Override any AWS operation response with a fluent builder. Inject throttling errors, custom status codes, or delayed responses at the operation level without changing application code.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128165;</div>
+          <h3>Chaos Engineering</h3>
+          <p>Inject error rates, latency ranges, connection resets, and timeouts into any service. Apply and clear chaos scenarios programmatically within individual test functions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128274;</div>
+          <h3>IAM Authorization</h3>
+          <p>Switch IAM modes to <code>disabled</code>, <code>audit</code>, or <code>enforce</code>. Define named identities with inline allow/deny policies and verify authorization behavior in tests.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 48px;">
+        <a href="sdk-python.html" class="btn btn-primary">Python SDK Docs</a>
+        &nbsp;&nbsp;
+        <a href="https://github.com/local-web-services/local-web-services-python-sdk" class="btn btn-secondary">GitHub</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Quick Start: Python</h2>
+      <p class="section-lead">Install the SDK and write your first test in minutes.</p>
+
+      <div class="steps" style="max-width: 900px;">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Install</h3>
+            <div class="code-block" style="margin-top: 8px;">
+              <code>pip install local-web-services-python-sdk
+# or with uv
+uv add local-web-services-python-sdk</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Declare your resources</h3>
+            <div class="code-block" style="margin-top: 8px;">
+              <code>from lws_testing import LwsSession
+
+with LwsSession(
+    tables=[{"name": "Orders", "partition_key": "id"}],
+    queues=["OrderQueue"],
+    buckets=["ReceiptsBucket"],
+) as session:
+    # services are running
+    pass</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Write a test</h3>
+            <div class="code-block" style="margin-top: 8px;">
+              <code>def test_create_order(lws_session):
+    # Use a boto3 client pointing to local services
+    client = lws_session.client("dynamodb")
+    client.put_item(
+        TableName="Orders",
+        Item={"id": {"S": "42"}, "status": {"S": "pending"}}
+    )
+
+    # Or use the DynamoDB helper with assertions
+    table = lws_session.dynamodb("Orders")
+    table.assert_item_exists({"id": {"S": "42"}})</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Configure pytest fixtures</h3>
+            <div class="code-block" style="margin-top: 8px;">
+              <code># conftest.py
+import pytest
+from lws_testing import LwsSession
+
+@pytest.fixture(scope="session")
+def lws_session_spec():
+    return {
+        "tables": [{"name": "Orders", "partition_key": "id"}],
+        "queues": ["OrderQueue"],
+        "buckets": ["ReceiptsBucket"],
+    }
+
+# lws_session and lws_reset fixtures are provided
+# automatically by the lws_testing pytest plugin</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 48px;">
+        <a href="sdk-python.html" class="btn btn-primary">Full Python SDK Reference</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>The fastest feedback loop for cloud-native development, for humans and AI alike</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/local-web-services-python-sdk">Python SDK</a>
+          <a href="https://pypi.org/project/local-web-services-python-sdk/">PyPI</a>
+          <a href="https://www.npmjs.com/package/local-web-services-typescript-sdk">npm</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="lws.js"></script>
+</body>
+</html>

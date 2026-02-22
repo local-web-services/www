@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeScript SDK - Local Web Services</title>
+  <meta name="description" content="local-web-services-typescript-sdk for TypeScript: Jest/Vitest AWS service testing with pre-configured AWS SDK v3 clients. No credentials, no refactoring.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">Local Web Services</a>
+      <ul class="nav-links">
+        <li><a href="getting-started.html">Get Started</a></li>
+        <li><a href="sdks.html" class="nav-active">SDKs</a></li>
+        <li><a href="services.html">Cloud Emulation</a></li>
+        <li><a href="mocking.html">Mocking Services</a></li>
+        <li><a href="chaos.html">Chaos Engineering</a></li>
+        <li><a href="cli.html">CLI</a></li>
+        <li><a href="https://github.com/local-web-services/local-web-services" class="nav-github">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>TypeScript SDK</h1>
+      <p class="section-lead">AWS service testing for TypeScript and Node.js. Use your existing AWS SDK v3 code unchanged — the SDK provides pre-configured clients that point to local services instead of AWS. No credentials, no deploy, no waiting.</p>
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 24px; flex-wrap: wrap;">
+        <a href="https://www.npmjs.com/package/local-web-services-typescript-sdk" class="btn btn-primary">npm</a>
+        <a href="https://github.com/local-web-services/local-web-services-sdk-typescript" class="btn btn-secondary">GitHub</a>
+        <a href="sdks.html" class="btn btn-secondary">All SDKs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Start -->
+  <section class="section">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <p class="section-lead">Install, create a session in <code>beforeAll</code>, and write a test. Local services start as a subprocess — your AWS SDK v3 clients talk to them automatically.</p>
+
+      <div class="steps" style="max-width: 900px;">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Install</h3>
+            <div class="code-block">
+              <code>npm install local-web-services-typescript-sdk
+# also requires local-web-services (Python) for ldk dev
+pip install local-web-services</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Configure Jest</h3>
+            <div class="code-block">
+              <code>// jest.config.ts
+export default {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testTimeout: 60000,  // allow time for ldk dev to start
+};</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Write your test</h3>
+            <div class="code-block">
+              <code>// orders.test.ts
+import { LwsSession } from 'local-web-services-typescript-sdk';
+
+let session: LwsSession;
+
+beforeAll(async () => {
+  session = await LwsSession.create({
+    tables: [{ name: 'Orders', partitionKey: 'id' }],
+    queues: ['OrderQueue'],
+  });
+});
+
+afterAll(async () => {
+  await session.close();
+});
+
+beforeEach(async () => {
+  await session.reset();  // wipe state between tests
+});
+
+test('creates an order', async () => {
+  // Call your real application code
+  const { createOrder } = await import('./orders');
+  await createOrder({ id: '42', status: 'pending' });
+
+  // Assert using the DynamoDB helper
+  const table = session.dynamodb('Orders');
+  const item = await table.assertItemExists({ id: { S: '42' } });
+  expect(item.status.S).toBe('pending');
+});
+
+test('order sends a queue message', async () => {
+  const { createOrder } = await import('./orders');
+  await createOrder({ id: '99', status: 'pending' });
+
+  const queue = session.sqs('OrderQueue');
+  await queue.assertMessageCount(1);
+});</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Run your tests</h3>
+            <div class="code-block">
+              <code>npx jest</code>
+            </div>
+            <p style="margin-top: 12px; color: var(--color-text-muted);">The session starts <code>ldk dev</code> once in <code>beforeAll</code>, then <code>reset()</code> wipes state before each test.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drop-in replacement -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Drop-in Replacement — Zero Code Changes</h2>
+      <p class="section-lead">Your application already uses AWS SDK v3. The SDK returns fully-typed <code>DynamoDBClient</code>, <code>SQSClient</code>, and <code>S3Client</code> instances pre-configured to talk to local services. Nothing in your application needs to change.</p>
+
+      <div class="comparison comparison--code">
+        <div class="comparison-col">
+          <h3>Your application code</h3>
+          <div class="code-block" style="margin-top: 16px;">
+            <code>// orders.ts  — unchanged
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+
+const dynamo = new DynamoDBClient({});
+const sqs    = new SQSClient({});
+
+export async function createOrder(order: { id: string; status: string }) {
+  await dynamo.send(new PutItemCommand({
+    TableName: 'Orders',
+    Item: {
+      id:     { S: order.id },
+      status: { S: order.status },
+    },
+  }));
+
+  await sqs.send(new SendMessageCommand({
+    QueueUrl:    process.env.ORDER_QUEUE_URL!,
+    MessageBody: JSON.stringify(order),
+  }));
+}</code>
+          </div>
+        </div>
+        <div class="comparison-col">
+          <h3>Your test</h3>
+          <div class="code-block" style="margin-top: 16px;">
+            <code>// orders.test.ts
+import { LwsSession } from 'local-web-services-typescript-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+
+let session: LwsSession;
+
+beforeAll(async () => {
+  session = await LwsSession.create({
+    tables: [{ name: 'Orders', partitionKey: 'id' }],
+    queues: ['OrderQueue'],
+  });
+  // Pre-configured client — same type as your app uses
+  const client = session.client&lt;DynamoDBClient&gt;('dynamodb');
+});
+
+test('creates an order', async () => {
+  const { createOrder } = await import('./orders');
+  await createOrder({ id: '42', status: 'pending' });
+
+  const table = session.dynamodb('Orders');
+  await table.assertItemExists({ id: { S: '42' } });
+});</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-grid" style="margin-top: 48px;">
+        <div class="feature-card">
+          <div class="feature-icon">&#128275;</div>
+          <h3>No Credentials</h3>
+          <p>Local services accept any credentials. No AWS account, no IAM setup, no environment variables required in your test environment.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&empty;</div>
+          <h3>No Refactoring</h3>
+          <p>Application code is identical to production. The SDK starts local services and configures the endpoint — no dependency injection, no mocking libraries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128311;</div>
+          <h3>Fully Typed</h3>
+          <p><code>session.client&lt;DynamoDBClient&gt;('dynamodb')</code> returns the exact same type your application uses. Full TypeScript inference and IDE completion.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LwsSession API -->
+  <section class="section">
+    <div class="container">
+      <h2>LwsSession</h2>
+      <p class="section-lead">All factory methods are async — they start <code>ldk dev</code> and wait until services are ready before resolving.</p>
+
+      <h3 class="section-subheading section-subheading--primary">Factory methods</h3>
+      <div class="code-block config-example">
+        <code>import { LwsSession } from 'local-web-services-typescript-sdk';
+
+// Explicit resource declaration
+const session = await LwsSession.create({
+  tables: [
+    { name: 'Orders', partitionKey: 'id' },
+    { name: 'Products', partitionKey: 'sku', sortKey: 'version' },
+  ],
+  queues: ['OrderQueue', 'DeadLetterQueue'],
+  buckets: ['ReceiptsBucket'],
+});
+
+// Auto-discover from CDK cloud assembly (cdk.out/)
+const session = await LwsSession.fromCdk('../my-cdk-project');
+
+// Auto-discover from Terraform .tf files
+const session = await LwsSession.fromHcl('../my-terraform-project');
+
+// Always close after your tests
+await session.close();</code>
+      </div>
+
+      <h3 class="section-subheading section-subheading--primary">Client factory</h3>
+      <div class="code-block config-example">
+        <code>import {
+  DynamoDBClient,
+  SQSClient,
+  S3Client,
+  SNSClient,
+  SSMClient,
+  SecretsManagerClient,
+  SFNClient,
+} from '@aws-sdk/client-*';
+
+const dynamo  = session.client&lt;DynamoDBClient&gt;('dynamodb');
+const sqs     = session.client&lt;SQSClient&gt;('sqs');
+const s3      = session.client&lt;S3Client&gt;('s3');
+const sns     = session.client&lt;SNSClient&gt;('sns');
+const ssm     = session.client&lt;SSMClient&gt;('ssm');
+const secrets = session.client&lt;SecretsManagerClient&gt;('secretsmanager');
+const sfn     = session.client&lt;SFNClient&gt;('stepfunctions');
+
+await session.reset();  // clear all tables, queues, buckets</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resource Helpers -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Resource Helpers</h2>
+      <p class="section-lead">Typed async helpers with built-in assertion methods. Skip the boilerplate.</p>
+
+      <h3 class="section-subheading section-subheading--primary">DynamoDB</h3>
+      <div class="code-block config-example">
+        <code>const table = session.dynamodb('Orders');
+
+await table.put({ id: { S: '1' }, status: { S: 'pending' } });
+const item = await table.get({ id: { S: '1' } });
+await table.delete({ id: { S: '1' } });
+const items = await table.scan();
+
+await table.assertItemExists({ id: { S: '1' } });  // returns item
+await table.assertItemCount(5);</code>
+      </div>
+
+      <h3 class="section-subheading section-subheading--primary">SQS</h3>
+      <div class="code-block config-example">
+        <code>const queue = session.sqs('OrderQueue');
+
+await queue.send({ orderId: '42', total: 99.99 });  // object → JSON
+await queue.send('plain text message');
+
+const messages = await queue.receive({ maxMessages: 10 });
+await queue.purge();
+
+await queue.assertMessageCount(3);
+console.log(queue.url);  // http://localhost:.../OrderQueue</code>
+      </div>
+
+      <h3 class="section-subheading section-subheading--primary">S3</h3>
+      <div class="code-block config-example">
+        <code>const bucket = session.s3('ReceiptsBucket');
+
+await bucket.put('receipts/001.pdf', Buffer.from('PDF bytes'));
+await bucket.put('config.json', JSON.stringify({ key: 'value' }));
+
+const data = await bucket.get('receipts/001.pdf');      // Buffer
+const text = await bucket.getText('config.json');       // string
+const keys = await bucket.listKeys({ prefix: 'receipts/' });
+await bucket.delete('config.json');
+
+await bucket.assertObjectExists('receipts/001.pdf');
+await bucket.assertObjectCount({ expected: 5, prefix: 'receipts/' });</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mocking -->
+  <section class="section">
+    <div class="container">
+      <h2>Operation Mocking</h2>
+      <p class="section-lead">Override any AWS operation response with a fluent builder. No changes to application code needed.</p>
+
+      <div class="code-block config-example">
+        <code>// Inject throttling
+await session.mock('dynamodb').operation('PutItem').respond({
+  status: 400,
+  body: { __type: 'ProvisionedThroughputExceededException' },
+});
+
+// Add artificial latency
+await session.mock('sqs').operation('SendMessage').respond({
+  status: 200,
+  delayMs: 500,
+});
+
+// Match on a specific request header
+await session.mock('s3')
+  .operation('GetObject')
+  .withHeader('x-request-id', 'test-123')
+  .respond({ status: 403, body: { __type: 'AccessDenied' } });
+
+// Clear all mocks for a service
+await session.mock('dynamodb').clear();</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chaos -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Chaos Engineering</h2>
+      <p class="section-lead">Inject failure conditions programmatically and verify your application handles them gracefully.</p>
+
+      <div class="code-block config-example">
+        <code>await session.chaos('dynamodb').errorRate(0.3).latency({ minMs: 50, maxMs: 200 }).apply();
+await session.chaos('sqs').connectionResetRate(0.1).timeoutRate(0.05).apply();
+await session.chaos('dynamodb').clear();</code>
+      </div>
+
+      <div class="code-block config-example">
+        <code>test('handles DynamoDB latency', async () => {
+  await session.chaos('dynamodb').latency({ minMs: 100, maxMs: 500 }).apply();
+
+  const start = Date.now();
+  const { createOrder } = await import('./orders');
+  await createOrder({ id: '42', status: 'pending' });
+  const elapsed = Date.now() - start;
+
+  expect(elapsed).toBeGreaterThanOrEqual(100);
+  await session.chaos('dynamodb').clear();
+});</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- IAM -->
+  <section class="section">
+    <div class="container">
+      <h2>IAM Authorization</h2>
+      <p class="section-lead">Switch IAM modes and define named identities with inline policies to test authorization behaviour.</p>
+
+      <div class="code-block config-example">
+        <code>await session.iam.mode('enforce').apply();
+await session.iam.mode('audit').apply();
+await session.iam.mode('disabled').apply();  // default
+
+await session.iam.defaultIdentity('service-account').apply();
+
+await session.iam
+  .identity('readonly')
+  .allow(['dynamodb:GetItem', 'dynamodb:Scan'])
+  .apply();</code>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Local Web Services</a>
+          <p>The fastest feedback loop for cloud-native development, for humans and AI alike</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
+          <a href="https://github.com/local-web-services/local-web-services-python-sdk">Python SDK</a>
+          <a href="https://pypi.org/project/local-web-services-python-sdk/">PyPI</a>
+          <a href="https://www.npmjs.com/package/local-web-services-typescript-sdk">npm</a>
+          <a href="https://github.com/local-web-services/sample-project">CDK Sample</a>
+          <a href="https://github.com/local-web-services/sample-project-terraform">Terraform Sample</a>
+          <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
+        </div>
+      </div>
+      <p class="footer-copy">Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="lws.js"></script>
+</body>
+</html>
