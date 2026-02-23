@@ -2,7 +2,7 @@
 
 Documentation site for the [Local Web Services](https://github.com/local-web-services/local-web-services) project.
 
-**Live site:** https://local-web-services.github.io/www/
+**Live site:** https://local-web-services.github.io/
 
 ## About
 
