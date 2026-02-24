@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local Web Services - The Fastest Feedback Loop for Cloud-Native Development</title>
-  <meta name="description" content="Local Web Services reads your AWS CDK or Terraform project and recreates your application locally. Build, test, and debug cloud-native AWS apps without deploying — no credentials, no cost, no waiting.">
+  <meta name="description" content="Local Web Services reads your AWS CDK or HCL project and recreates your application locally. Build, test, and debug cloud-native AWS apps without deploying — no credentials, no cost, no waiting.">
   <link rel="sitemap" type="application/xml" href="sitemap.xml">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -30,7 +30,7 @@
     <div class="container">
       <h1>Local Web Services</h1>
       <p class="hero-subtitle">Test AWS applications with realistic in-process local services using native language SDKs.<br>
-Or run <code>ldk dev</code> as a local development server for CDK and Terraform projects.<br>
+Or run <code>ldk dev</code> as a local development server for CDK and HCL projects.<br>
 No credentials. No cost. No waiting.</p>
       <div class="hero-actions">
         <a href="sdks.html" class="btn btn-primary">Explore the SDKs</a>
@@ -45,7 +45,7 @@ No credentials. No cost. No waiting.</p>
   <section class="section" id="what">
     <div class="container">
       <h2>What is Local Web Services?</h2>
-      <p class="section-lead">Local Web Services emulates AWS services locally for development and testing. Use the language SDKs for in-process pytest or unit testing, or run <code>ldk dev</code> to start a full local development server that reads your CDK or Terraform project and recreates your entire stack.</p>
+      <p class="section-lead">Local Web Services emulates AWS services locally for development and testing. Use the language SDKs for in-process pytest or unit testing, or run <code>ldk dev</code> to start a full local development server that reads your CDK or HCL project and recreates your entire stack.</p>
 
       <div class="feature-grid">
         <div class="feature-card">
@@ -56,7 +56,7 @@ No credentials. No cost. No waiting.</p>
         <div class="feature-card">
           <div class="feature-icon">&#9889;</div>
           <h3>ldk</h3>
-          <p>The local development server. Parses your CDK or Terraform project and spins up local providers for every AWS service you use — DynamoDB, Lambda, S3, SQS, and more. Hot reloading included.</p>
+          <p>The local development server. Parses your CDK or HCL project and spins up local providers for every AWS service you use — DynamoDB, Lambda, S3, SQS, and more. Hot reloading included.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128295;</div>
@@ -107,14 +107,14 @@ No credentials. No cost. No waiting.</p>
   <section class="section section-alt" id="why">
     <div class="container">
       <h2>Why Use Local Web Services?</h2>
-      <p class="section-lead">Building with AWS CDK or Terraform traditionally means deploying to the cloud just to test your code. Every change triggers a deploy-wait-test cycle that kills your flow and racks up costs.</p>
+      <p class="section-lead">Building with AWS CDK or HCL traditionally means deploying to the cloud just to test your code. Every change triggers a deploy-wait-test cycle that kills your flow and racks up costs.</p>
 
       <div class="comparison">
         <div class="comparison-col comparison-before">
           <h3>Without Local Web Services</h3>
           <ul>
             <li>Edit code</li>
-            <li>Run <code>cdk deploy</code> or <code>terraform apply</code> — wait minutes</li>
+            <li>Run <code>cdk deploy</code> or <code>tofu apply</code> — wait minutes</li>
             <li>Test against live AWS resources</li>
             <li>Check CloudWatch logs for errors</li>
             <li>Pay for every invocation and resource</li>
@@ -173,7 +173,7 @@ No credentials. No cost. No waiting.</p>
   <section class="section" id="how-it-works">
     <div class="container">
       <h2>How It Works</h2>
-      <p class="section-lead">Local Web Services auto-detects your project type (CDK or Terraform) and starts local AWS-compatible service endpoints. Your code talks to local services instead of real AWS.</p>
+      <p class="section-lead">Local Web Services auto-detects your project type (CDK or HCL) and starts local AWS-compatible service endpoints. Your code talks to local services instead of real AWS.</p>
 
       <h3 class="section-subheading">CDK Mode</h3>
       <div class="steps">
@@ -207,13 +207,13 @@ No credentials. No cost. No waiting.</p>
         </div>
       </div>
 
-      <h3 class="section-subheading" style="margin-top: 80px;">Terraform Mode</h3>
+      <h3 class="section-subheading" style="margin-top: 80px;">HCL Mode</h3>
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Detect</h3>
-            <p>The <code>ldk</code> tool detects <code>.tf</code> files in your project directory and enters Terraform mode automatically (or use <code>--mode terraform</code> explicitly).</p>
+            <p>The <code>ldk</code> tool detects <code>.tf</code> files in your project directory and enters HCL mode automatically (or use <code>--mode terraform</code> explicitly).</p>
           </div>
         </div>
         <div class="step">
@@ -234,7 +234,7 @@ No credentials. No cost. No waiting.</p>
           <div class="step-number">4</div>
           <div class="step-content">
             <h3>Apply</h3>
-            <p>Run <code>terraform apply</code> as normal. Terraform creates resources (tables, queues, buckets, Lambda functions) against your local endpoints. Your Lambda handlers run locally with full AWS SDK support.</p>
+            <p>Run <code>tofu apply</code> as normal. Your HCL tool creates resources (tables, queues, buckets, Lambda functions) against your local endpoints. Your Lambda handlers run locally with full AWS SDK support.</p>
           </div>
         </div>
       </div>

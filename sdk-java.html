@@ -139,7 +139,7 @@ class OrderProcessorTest {
 
       <div class="comparison comparison--code">
         <div class="comparison-col">
-          <h3>Auto-discover from Terraform</h3>
+          <h3>Auto-discover from HCL</h3>
           <div class="code-block" style="margin-top: 16px;">
             <code>// Reads .tf files in "terraform/", starts ldk dev,
 // and pre-creates all declared resources
@@ -184,7 +184,7 @@ import io.localwebservices.lws.SessionSpec;
 import io.localwebservices.lws.TableSpec;
 import io.localwebservices.lws.StateMachineSpec;
 
-// Auto-discover from Terraform .tf files
+// Auto-discover from HCL .tf files
 LwsSession session = LwsSession.fromHcl("../my-terraform-project");
 
 // Explicit resource declaration

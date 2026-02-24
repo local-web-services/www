@@ -28,7 +28,7 @@
   <header class="page-header">
     <div class="container">
       <h1>Cloud Emulation</h1>
-      <p class="section-lead">Each service provides AWS-compatible API operations emulated at runtime. In CDK mode, <strong>CDK constructs</strong> are parsed from your <code>cdk synth</code> output. In Terraform mode, all services start in always-on mode and resources are created dynamically via management APIs.</p>
+      <p class="section-lead">Each service provides AWS-compatible API operations emulated at runtime. In CDK mode, <strong>CDK constructs</strong> are parsed from your <code>cdk synth</code> output. In HCL mode, all services start in always-on mode and resources are created dynamically via management APIs.</p>
     </div>
   </header>
 
@@ -346,7 +346,7 @@
             <p class="cdk-props"><code>handler</code>, <code>runtime</code>, <code>code</code>, <code>timeout</code>, <code>memorySize</code>, <code>environment</code>, <code>authType</code>, <code>cors</code>, <code>invokeMode</code></p>
           </div>
           <div class="service-detail-section">
-            <h4>Management API (Terraform mode)</h4>
+            <h4>Management API (HCL mode)</h4>
             <div class="service-detail-ops">
               <span class="op">CreateFunction</span>
               <span class="op">GetFunction</span>
@@ -376,7 +376,7 @@
               <span class="op">DeleteFunctionUrlConfig</span>
             </div>
           </div>
-          <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, environment variable injection, and <strong>Function URLs</strong> &mdash; each function URL gets its own HTTP endpoint on a dedicated port with full CORS support and AWS Lambda payload format 2.0. Supports both BUFFERED and RESPONSE_STREAM invoke modes. In CDK mode, functions and URLs are discovered from the cloud assembly. In Terraform mode, functions are created dynamically via the management API.</p>
+          <p class="service-note">Runs functions inside official AWS Lambda Docker images (with AWS SDK pre-installed). Run <code>ldk setup lambda</code> once to pull the images. Supports timeout enforcement, realistic context objects, environment variable injection, and <strong>Function URLs</strong> &mdash; each function URL gets its own HTTP endpoint on a dedicated port with full CORS support and AWS Lambda payload format 2.0. Supports both BUFFERED and RESPONSE_STREAM invoke modes. In CDK mode, functions and URLs are discovered from the cloud assembly. In HCL mode, functions are created dynamically via the management API.</p>
         </div>
 
         <div class="service-detail" id="apigateway">
@@ -451,7 +451,7 @@
               <span class="op">ListAuthorizers</span>
             </div>
           </div>
-          <p class="service-note">Supports both REST API (V1) and HTTP API (V2) with Lambda proxy integration. Features include CORS handling, TOKEN and JWT authorizers, multi-value query parameters, multi-value headers, binary payload support (base64 encoding), path parameters, and request/response mapping. In Terraform mode, APIs and routes are created dynamically via the management API.</p>
+          <p class="service-note">Supports both REST API (V1) and HTTP API (V2) with Lambda proxy integration. Features include CORS handling, TOKEN and JWT authorizers, multi-value query parameters, multi-value headers, binary payload support (base64 encoding), path parameters, and request/response mapping. In HCL mode, APIs and routes are created dynamically via the management API.</p>
         </div>
       </div>
 
@@ -574,7 +574,7 @@
               <span class="op">Enforce</span>
             </div>
           </div>
-          <p class="service-note">IAM role and policy operations are accepted and stored in memory. STS returns credentials and caller identity for Terraform compatibility. <strong>IAM authorization</strong> can be configured in three modes: <strong>disabled</strong> (default &mdash; all requests pass through), <strong>audit</strong> (requests pass through but violations are logged as warnings), or <strong>enforce</strong> (requests that fail IAM checks are denied with HTTP 403). Supports identity-based policies, permissions boundaries, resource policies, wildcard matching, and per-request identity override via HTTP header. Authorization applies to DynamoDB, S3, SQS, SNS, EventBridge, Step Functions, Cognito, SSM, and Secrets Manager.</p>
+          <p class="service-note">IAM role and policy operations are accepted and stored in memory. STS returns credentials and caller identity for HCL compatibility. <strong>IAM authorization</strong> can be configured in three modes: <strong>disabled</strong> (default &mdash; all requests pass through), <strong>audit</strong> (requests pass through but violations are logged as warnings), or <strong>enforce</strong> (requests that fail IAM checks are denied with HTTP 403). Supports identity-based policies, permissions boundaries, resource policies, wildcard matching, and per-request identity override via HTTP header. Authorization applies to DynamoDB, S3, SQS, SNS, EventBridge, Step Functions, Cognito, SSM, and Secrets Manager.</p>
         </div>
       </div>
 
@@ -596,7 +596,7 @@
               <span class="op">DeleteDBInstance</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports cluster and instance lifecycle operations with identifier-based filtering.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports cluster and instance lifecycle operations with identifier-based filtering.</p>
         </div>
 
         <div class="service-detail" id="documentdb">
@@ -611,7 +611,7 @@
               <span class="op">DeleteDBCluster</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports MongoDB-compatible cluster lifecycle operations.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports MongoDB-compatible cluster lifecycle operations.</p>
         </div>
 
         <div class="service-detail" id="neptune">
@@ -626,7 +626,7 @@
               <span class="op">DeleteDBCluster</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports graph database cluster lifecycle with Gremlin endpoint exposure.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports graph database cluster lifecycle with Gremlin endpoint exposure.</p>
         </div>
       </div>
 
@@ -646,7 +646,7 @@
               <span class="op">ListElasticsearchDomainNames</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports domain lifecycle operations.</p>
         </div>
 
         <div class="service-detail" id="opensearch">
@@ -662,7 +662,7 @@
               <span class="op">ListDomainNames</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports domain lifecycle operations.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports domain lifecycle operations.</p>
         </div>
 
         <div class="service-detail" id="elasticache">
@@ -677,7 +677,7 @@
               <span class="op">DeleteCacheCluster</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports cache cluster lifecycle with status tracking.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports cache cluster lifecycle with status tracking.</p>
         </div>
 
         <div class="service-detail" id="memorydb">
@@ -692,7 +692,7 @@
               <span class="op">DeleteCluster</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports Redis-compatible cluster lifecycle with status tracking.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports Redis-compatible cluster lifecycle with status tracking.</p>
         </div>
       </div>
 
@@ -710,7 +710,7 @@
               <span class="op">ListVaults</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports idempotent vault creation and listing.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports idempotent vault creation and listing.</p>
         </div>
 
         <div class="service-detail" id="s3tables">
@@ -726,7 +726,7 @@
               <span class="op">ListTables</span>
             </div>
           </div>
-          <p class="service-note">Stub APIs for Terraform compatibility. Supports table buckets with namespace-based table organization.</p>
+          <p class="service-note">Stub APIs for HCL compatibility. Supports table buckets with namespace-based table organization.</p>
         </div>
       </div>
     </div>

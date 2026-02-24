@@ -124,7 +124,7 @@ func TestProcessOrder_runsStateMachineAndReturnsResult(t *testing.T) {
 
       <div class="comparison comparison--code">
         <div class="comparison-col">
-          <h3>Auto-discover from Terraform</h3>
+          <h3>Auto-discover from HCL</h3>
           <div class="code-block" style="margin-top: 16px;">
             <code>// Reads .tf files in "terraform/", starts ldk dev,
 // and pre-creates all declared resources
@@ -172,7 +172,7 @@ defer session.Close()</code>
       <div class="code-block config-example">
         <code>import "github.com/local-web-services/local-web-services-go-sdk/lws"
 
-// Auto-discover from Terraform .tf files
+// Auto-discover from HCL .tf files
 session, err := lws.FromHcl("../my-terraform-project")
 
 // Explicit resource declaration

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getting Started - Local Web Services</title>
-  <meta name="description" content="Install Local Web Services and get running with AWS CDK or Terraform in under five minutes.">
+  <meta name="description" content="Install Local Web Services and get running with AWS CDK or HCL in under five minutes.">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
@@ -35,7 +35,7 @@
   <section class="section">
     <div class="container">
       <h2>Prerequisites</h2>
-      <p class="section-lead">These are required for both CDK and Terraform workflows.</p>
+      <p class="section-lead">These are required for both CDK and HCL workflows.</p>
 
       <div class="getting-started-steps">
         <div class="gs-step">
@@ -109,19 +109,19 @@ uvx --from local-web-services lws s3api list-objects-v2 --bucket order-documents
 
   <section class="section">
     <div class="container">
-      <h2>Terraform Quick Start</h2>
-      <p class="section-lead">Clone a sample Terraform project and run it locally in six steps.</p>
+      <h2>HCL Quick Start</h2>
+      <p class="section-lead">Clone a sample HCL project and run it locally in six steps.</p>
 
       <div class="getting-started-steps">
         <div class="gs-step">
           <h3>Additional Prerequisite</h3>
           <ul>
-            <li><a href="https://www.terraform.io/">Terraform</a> >= 1.0</li>
+            <li><a href="https://opentofu.org/">OpenTofu</a> or <a href="https://www.terraform.io/">Terraform</a> >= 1.0</li>
           </ul>
         </div>
 
         <div class="gs-step">
-          <h3>1. Clone the Terraform sample project</h3>
+          <h3>1. Clone the HCL sample project</h3>
           <div class="code-block"><code>git clone https://github.com/local-web-services/local-web-services.git
 cd local-web-services/sample-project-hcl
 cd lambda/create-order && npm install && cd ../..
@@ -131,8 +131,8 @@ cd lambda/generate-receipt && npm install && cd ../..</code></div>
         </div>
 
         <div class="gs-step">
-          <h3>2. Initialize Terraform</h3>
-          <div class="code-block"><code>terraform init</code></div>
+          <h3>2. Initialize HCL project</h3>
+          <div class="code-block"><code>tofu init</code></div>
         </div>
 
         <div class="gs-step">
@@ -144,14 +144,14 @@ cd lambda/generate-receipt && npm install && cd ../..</code></div>
         <div class="gs-step">
           <h3>4. Start the local environment</h3>
           <div class="code-block"><code>uvx --from local-web-services ldk dev</code></div>
-          <p>The <code>ldk dev</code> command auto-detects your Terraform project, starts all AWS service providers in always-on mode, and generates a <code>_lws_override.tf</code> file that redirects Terraform's AWS provider to your local endpoints.</p>
+          <p>The <code>ldk dev</code> command auto-detects your HCL project, starts all AWS service providers in always-on mode, and generates a <code>_lws_override.tf</code> file that redirects Terraform's AWS provider to your local endpoints.</p>
         </div>
 
         <div class="gs-step">
-          <h3>5. Apply Terraform</h3>
-          <p>In another terminal, apply your Terraform configuration against the local services:</p>
-          <div class="code-block"><code>terraform apply -auto-approve</code></div>
-          <p>Terraform creates all resources (DynamoDB tables, SQS queues, Lambda functions, API Gateway routes, etc.) against your local endpoints. No AWS account needed.</p>
+          <h3>5. Apply HCL</h3>
+          <p>In another terminal, apply your HCL configuration against the local services:</p>
+          <div class="code-block"><code>tofu apply -auto-approve</code></div>
+          <p>Your HCL tool creates all resources (DynamoDB tables, SQS queues, Lambda functions, API Gateway routes, etc.) against your local endpoints. No AWS account needed.</p>
         </div>
 
         <div class="gs-step">

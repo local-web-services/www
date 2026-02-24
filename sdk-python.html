@@ -205,7 +205,7 @@ def test_create_order(lws_session):
         </div>
         <div class="lws-command">
           <h4>lws_session_from_hcl</h4>
-          <p>Session-scoped session with auto-discovery from Terraform project. Configure path via <code>hcl_project_dir</code> fixture (default <code>"."</code>).</p>
+          <p>Session-scoped session with auto-discovery from HCL project. Configure path via <code>hcl_project_dir</code> fixture (default <code>"."</code>).</p>
         </div>
       </div>
 
@@ -303,7 +303,7 @@ with LwsSession(
     client.put_item(TableName="Orders", Item={"id": {"S": "1"}})</code>
       </div>
 
-      <h3 class="section-subheading section-subheading--primary">Auto-discover from CDK or Terraform</h3>
+      <h3 class="section-subheading section-subheading--primary">Auto-discover from CDK or HCL</h3>
       <div class="code-block config-example">
         <code>from lws_testing import LwsSession
 
@@ -460,7 +460,7 @@ session.iam\
   <section class="section section-alt">
     <div class="container">
       <h2>Resource Discovery</h2>
-      <p class="section-lead">Instead of declaring resources manually, let the SDK discover them from your CDK cloud assembly or Terraform HCL files.</p>
+      <p class="section-lead">Instead of declaring resources manually, let the SDK discover them from your CDK cloud assembly or HCL files.</p>
 
       <div class="feature-grid feature-grid--2col">
         <div class="feature-card">
@@ -473,7 +473,7 @@ session.iam\
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128295;</div>
-          <h3>Terraform / HCL Discovery</h3>
+          <h3>HCL Discovery</h3>
           <p>Parses <code>.tf</code> files in your project directory. No <code>terraform plan</code> or <code>terraform apply</code> needed.</p>
           <div class="code-block" style="margin-top: 16px;">
             <code>LwsSession.from_hcl("../my-terraform-project")</code>
