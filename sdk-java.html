@@ -30,8 +30,8 @@
       <h1>Java SDK</h1>
       <p class="section-lead">AWS service testing for Java and Kotlin. Spawns <code>ldk dev</code> as a subprocess and provides pre-configured AWS SDK v2 clients pointing at local emulators. JUnit 5 integration with try-with-resources lifecycle management.</p>
       <div style="display: flex; gap: 16px; justify-content: center; margin-top: 24px; flex-wrap: wrap;">
-        <a href="https://github.com/local-web-services/local-web-services-java-sdk" class="btn btn-primary">GitHub</a>
-        <a href="https://github.com/local-web-services/local-web-services-sdk-java-example-project" class="btn btn-secondary">Example Project</a>
+        <a href="https://github.com/local-web-services/local-web-services/tree/main/lang/java/sdk" class="btn btn-primary">GitHub</a>
+        <a href="https://github.com/local-web-services/local-web-services/tree/main/lang/java/example" class="btn btn-secondary">Example Project</a>
         <a href="sdks.html" class="btn btn-secondary">All SDKs</a>
       </div>
     </div>
@@ -54,7 +54,7 @@ repositories {
     mavenCentral()
     maven {
         name = 'GitHubPackages'
-        url = uri('https://maven.pkg.github.com/local-web-services/local-web-services-java-sdk')
+        url = uri('https://maven.pkg.github.com/local-web-services/local-web-services')
         credentials {
             username = System.getenv('GITHUB_ACTOR') ?: project.findProperty('gpr.user') ?: ''
             password = System.getenv('GITHUB_TOKEN') ?: project.findProperty('gpr.key') ?: ''
@@ -63,7 +63,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'io.localwebservices:local-web-services-java-sdk:0.1.0'
+    testImplementation 'io.localwebservices:local-web-services-java-sdk:0.1.7'
 }
 
 // also requires local-web-services (Python) for ldk dev:
@@ -261,8 +261,8 @@ int    port     = session.portFor("dynamodb");      // port number</code>
         </div>
         <div class="footer-links">
           <a href="https://github.com/local-web-services/local-web-services">GitHub</a>
-          <a href="https://github.com/local-web-services/local-web-services-java-sdk">Java SDK</a>
-          <a href="https://github.com/local-web-services/local-web-services-sdk-java-example-project">Example Project</a>
+          <a href="https://github.com/local-web-services/local-web-services/tree/main/lang/java/sdk">Java SDK</a>
+          <a href="https://github.com/local-web-services/local-web-services/tree/main/lang/java/example">Example Project</a>
           <a href="https://github.com/local-web-services/local-web-services/issues">Issues</a>
         </div>
       </div>
